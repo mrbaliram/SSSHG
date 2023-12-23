@@ -1,0 +1,56 @@
+-------------------- eg 
+
+$table->tinyInteger('status')->default('1');
+$table->integer('votes');
+$table->mediumText('remarks');
+$table->string('email')->nullable();
+
+-----------------------------------------------------------
+
+php artisan make:model Society --all
+
+Modify the migrate file 
+
+php artisan migrate:status
+
+run it
+
+php artisan migrate
+
+-------------------------------------------
+
+php artisan make:model Member_type --all
+
+php artisan migrate:status
+
+php artisan migrate
+
+------------------------------------11.   society_rules
+
+php artisan make:model Society_rule --all
+
+----------------------------------------3.    Member
+  
+php artisan make:model Member --all
+
+$table->integer('user_id');
+$table->integer('parent_id');
+$table->integer('reference_id');
+$table->integer('sub_reference_id');
+$table->string('name');
+$table->string('city')->nullable();
+$table->string('state')->nullable();
+$table->string('address1')->nullable();
+$table->string('address2')->nullable();
+$table->string('pincode')->nullable();
+$table->string('guardian')->nullable();
+$table->string('gender', 4)->change();
+$table->mediumText('remarks');
+$table->string('email');
+$table->string('phone');
+$table->string('password');
+$table->string('other_info');
+$table->string('other_info2');
+$table->string('adhar_card_url');
+$table->string('photo_url');
+$table->tinyInteger('status')->default('1');
