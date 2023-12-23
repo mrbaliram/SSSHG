@@ -62,6 +62,8 @@ class SocietyController extends Controller
         $validatedFormData = $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:255',
+            'contribution_amount' => 'required|string|max:255',
+            'maximum_loan_amount' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'address1' => 'required|string|max:255',
@@ -70,8 +72,11 @@ class SocietyController extends Controller
             'start_date' => 'required|string|max:255',
         ]);
          
+         
         $sqlQury->name = $validatedFormData['name'];
         $sqlQury->code = $validatedFormData['code'];
+        $sqlQury->contribution_amount = $validatedFormData['contribution_amount'];
+        $sqlQury->maximum_loan_amount = $validatedFormData['maximum_loan_amount'];
         $sqlQury->city = $validatedFormData['city'];
         $sqlQury->state = $validatedFormData['state'];
         $sqlQury->address1 = $validatedFormData['address1'];
@@ -130,6 +135,8 @@ class SocietyController extends Controller
         $validatedFormData = $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:255',
+            'contribution_amount' => 'required|string|max:255',
+            'maximum_loan_amount' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'address1' => 'required|string|max:255',
@@ -140,6 +147,8 @@ class SocietyController extends Controller
          
         $sqlQury->name = $validatedFormData['name'];
         $sqlQury->code = $validatedFormData['code'];
+        $sqlQury->contribution_amount = $validatedFormData['contribution_amount'];
+        $sqlQury->maximum_loan_amount = $validatedFormData['maximum_loan_amount'];
         $sqlQury->city = $validatedFormData['city'];
         $sqlQury->state = $validatedFormData['state'];
         $sqlQury->address1 = $validatedFormData['address1'];

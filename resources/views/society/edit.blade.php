@@ -59,7 +59,18 @@
                                 <input  type="text" name="code" id="code" value="{{$results->code}}" class="border rounded-md w-full py-2 px-3 text-gray-700" required>
                             </div>
                         </div>
-                    
+                        <!-- contribution_amount
+                        maximum_loan_amount -->
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="contribution_amount" class="block text-gray-600 font-medium">Contribution Amount <span id="contribution_amount" style="color: green;"></span></label>
+                                <input id="contribution_amount" type="number" name="contribution_amount" value="{{$results->contribution_amount}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                            </div>
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="maximum_loan_amount" class="block text-gray-600 font-medium">Maximum Loan Amount</label>
+                                <input id="maximum_loan_amount" type="number" name="maximum_loan_amount" value="{{$results->maximum_loan_amount}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                            </div>
+                        </div>
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="address1" class="block text-gray-600 font-medium">Address <span style="color:red"> *</span></label>

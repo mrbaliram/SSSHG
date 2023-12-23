@@ -6,6 +6,7 @@ use App\Http\Controllers\SocietyRuleController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SocietyMembersController;
 use App\Http\Controllers\ContributionPaymentController;
+use App\Http\Controllers\LoanAccountController;
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -97,6 +98,17 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/contribution_payment/{id}/edit', [ContributionPaymentController::class, 'edit'])->name('contribution_payment.edit');
     Route::put('/contribution_payment/{id}', [ContributionPaymentController::class, 'update'])->name('contribution_payment.update');
+
+    // loan_account - LoanAccountController
+    Route::get('/loan_account', [LoanAccountController::class, 'index'])->name('loan_account.index');
+    Route::delete('/loan_account/{id}', [LoanAccountController::class, 'destroy'])->name('loan_account.destroy');
+    Route::get('/loan_account/{id}/show', [LoanAccountController::class, 'show'])->name('loan_account.show');
+
+    Route::get('/loan_account/create', [LoanAccountController::class, 'create'])->name('loan_account.create');
+    Route::post('/loan_account/store', [LoanAccountController::class, 'store'])->name('loan_account.store');
+
+    Route::get('/loan_account/{id}/edit', [LoanAccountController::class, 'edit'])->name('loan_account.edit');
+    Route::put('/loan_account/{id}', [LoanAccountController::class, 'update'])->name('loan_account.update');
 
 
 });

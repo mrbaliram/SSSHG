@@ -64,6 +64,18 @@
                     </x-nav-link>
                 </div>
 
+                <!-- loan_account -->
+                @php $loan_account_link_active = false;
+                    if(request()->routeIs('loan_account.index') || request()->routeIs('loan_account.create') || request()->routeIs('loan_account.edit'))
+                        $loan_account_link_active = true;
+                @endphp
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('loan_account.index')" :active="$loan_account_link_active">
+                        {{ __('Loan Ac') }}
+                    </x-nav-link>
+                </div>
+
 
             </div>
 

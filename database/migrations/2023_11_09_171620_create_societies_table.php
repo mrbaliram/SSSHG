@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('code')->nullable();
-            $table->decimal('amount')->nullable();
+            $table->decimal('contribution_amount')->nullable();
+            $table->decimal('maximum_loan_amount')->nullable();
             $table->dateTime('start_date', $precision = 0)->nullable(); 
             $table->string('contact_person')->nullable();
             $table->string('contact_no')->nullable();
