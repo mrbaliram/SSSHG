@@ -71,6 +71,22 @@
                                 <input id="maximum_loan_amount" type="number" name="maximum_loan_amount" value="{{$results->maximum_loan_amount}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
                             </div>
                         </div>
+                        <!-- Branch Code and Rate of intrest -->
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="branch_code" class="block text-gray-600 font-medium">Branch Code</span></label>
+                                <input id="branch_code" type="number" name="branch_code" value="{{$results->branch_code}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                            </div>
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="intrest_rate" class="block text-gray-600 font-medium">Intrest Rate</label>
+                                <select id="intrest_rate" name="intrest_rate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <option value="1" {{$results->intrest_rate == 1 ? 'Selected' : '' }}> 1 </option>
+                                    <option value="2" {{$results->intrest_rate == 2 ? 'Selected' : '' }}> 2 </option>
+                                    <option value="3" {{$results->intrest_rate == 3 ? 'Selected' : '' }}> 3 </option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="address1" class="block text-gray-600 font-medium">Address <span style="color:red"> *</span></label>

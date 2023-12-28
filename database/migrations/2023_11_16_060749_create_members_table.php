@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->id();
-            $table->integer('member_type_id');
+            $table->id();            
             $table->integer('user_id');
             $table->integer('parent_id')->nullable();
             $table->integer('reference_id')->nullable();

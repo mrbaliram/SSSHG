@@ -4,16 +4,10 @@
     <script type="text/javascript">    
         $(document).ready(function(){
              $("#saveBtn").click(function(){ 
-                if ($("#society_id").val().trim() == ''){
-                     alert('Please select the society');
-                     $("#society_id").focus();
+                if ($("#society_member_id").val().trim() == ''){
+                     alert('Please select the society member');
+                     $("#society_member_id").focus();
                     return false;
-                }else if($("#member_id").val().trim()  == ''){
-                      alert('Please select the member');
-                     $("#member_id").focus();
-                    return false;
-                }else{
-                    return true; 
                 }
             });
         });
@@ -51,14 +45,38 @@
                     @csrf
                     @method('PUT') 
 
+                        <!-- society and society member need to select -->
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <!-- Society -->
+                            <!-- society_member_id societyId -->
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="society_id" class="block text-gray-600 font-medium">Select Society</label>
+                                <select id="society_id" name="society_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    @foreach($societyResults as $societyData)
+                                        <option value="{{ $societyData->id }}" data-val="{{$societyData->maximum_loan_amount}}" data-intrest_rate="{{$societyData->intrest_rate}}" {{ $societyData->id == $results->societyId ? 'Selected' : '' }}> {{ $societyData->name }} [{{ $societyData->code }}]</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- society_member -->
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="society_member_id" class="block text-gray-600 font-medium">Select Society Main Member<span style="color:red"> *</span></label>
+                                <select id="society_member_id" name="society_member_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    @foreach($societyMembersResults as $societyMemberData)
+                                        <option data-val="{{$societyMemberData->society_id}}" value="{{ $societyMemberData->id }}" {{ $societyMemberData->id == $results->society_member_id ? 'Selected' : '' }}> {{ $societyMemberData->memberName }} [{{ $societyMemberData->societyName }}]</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="amount" class="block text-gray-600 font-medium">Amount <span id="amount" style="color: green;"></span></label>
-                                <input id="amount" type="number" name="amount" value="{{$results->amount}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                                <input id="full_amount" type="text" name="full_amount" value="{{$results->full_amount}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="intrest_rate" class="block text-gray-600 font-medium">Intrest Rate</label>
-                                <input id="intrest_rate" type="number" name="intrest_rate" value="{{$results->intrest_rate}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                                <input disabled id="intrest_rate" type="number" name="intrest_rate" value="{{$results->intrest_rate}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
                             </div>
                         </div>
 
@@ -101,4 +119,5 @@
             </div>
         </div>
     </div>
+
 </x-app-layout>

@@ -7,6 +7,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SocietyMembersController;
 use App\Http\Controllers\ContributionPaymentController;
 use App\Http\Controllers\LoanAccountController;
+use App\Http\Controllers\CommonController;
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// dashboard
+Route::get('/dashboard', [CommonController::class, 'dashboard'])->name('dashboard.dashboard');
 
 Route::middleware('auth')->group(function () {
 
@@ -110,6 +114,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/loan_account/{id}/edit', [LoanAccountController::class, 'edit'])->name('loan_account.edit');
     Route::put('/loan_account/{id}', [LoanAccountController::class, 'update'])->name('loan_account.update');
 
+    Route::get('/loan_account/{id}/refrence', [LoanAccountController::class, 'refrence'])->name('loan_account.refrence');
+    
+   // Route::put('/loan_account/{id}', [LoanAccountController::class, 'refrenceStore'])->name('loan_account.refrenceStore');
 
 });
 

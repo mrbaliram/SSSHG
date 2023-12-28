@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::create('loan_accounts', function (Blueprint $table) {
             $table->id();
+            $table->integer('society_member_id');
+            $table->integer('society_member_reference_id');
             $table->dateTime('start_date', $precision = 0)->nullable(); 
             $table->dateTime('end_date', $precision = 0)->nullable();
-            $table->decimal('amount')->nullable(); 
+            $table->decimal('amount')->nullable();
+            $table->decimal('full_amount')->nullable(); 
             $table->decimal('intrest_rate')->nullable();
             $table->tinyInteger('status')->default('1');
             $table->tinyInteger('is_delete')->default('0');

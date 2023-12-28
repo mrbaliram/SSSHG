@@ -74,6 +74,25 @@
                                 </select>
                             </div>
                         </div>
+                        
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="member_type_id" class="block text-gray-600 font-medium">Select Member Type<span style="color:red"> *</span></label>
+                                <select id="member_type_id" name="member_type_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <option value="">--Choose one option--</option>
+                                    @foreach($memberTypeResults as $memberTypeData)
+                                        <option value="{{ $memberTypeData->id }}"   {{   $memberTypeData->id == $results->member_type_id ? 'Selected' : '' }}> {{ $memberTypeData->name }} [{{ $memberTypeData->code }}]</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Member -->
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="remarks" class="block text-gray-600 font-medium">Remarks</label>
+                                <input type="text" name="remarks" id="remarks" value="{{$results->remarks}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                            </div>
+                        </div>
+
                         <!-- date part -->
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">

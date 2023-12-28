@@ -64,7 +64,12 @@ class SocietyMembersController extends Controller
             ->where('members.is_delete', 0)
             ->get();
 
-        return view('society_member.add', ['results' => $results, 'societyResults' => $societyResults, 'memberResults' => $memberResults]);
+        $memberTypeResults = DB::table('member_types')
+            ->select('member_types.*')
+            ->where('member_types.is_delete', 0)
+            ->get();
+
+        return view('society_member.add', ['results' => $results, 'societyResults' => $societyResults, 'memberResults' => $memberResults,'memberTypeResults' => $memberTypeResults]);
 
     }
 
@@ -77,10 +82,10 @@ class SocietyMembersController extends Controller
     public function store(Request $request)
     {
        
-
         $validatedFormData = $request->validate([
             'society_id' => 'required|string|max:255',
             'member_id' => 'required|string|max:255',
+            'member_type_id' => 'required|string|max:255',
             'start_date' => 'required|string|max:255',
             'end_date' => 'required|string|max:255',            
             'status' => 'required|in:1,0',
@@ -90,13 +95,16 @@ class SocietyMembersController extends Controller
                                 ->where('member_id', $validatedFormData['member_id'])
                                 ->first();
         if (is_null($isSocietyMembers)) {
-            $sqlQury = new SocietyMembers(); 
+            $sqlQury = new SocietyMembers();             
             $sqlQury->society_id = $validatedFormData['society_id'];
             $sqlQury->member_id = $validatedFormData['member_id'];
+            $sqlQury->member_type_id = $validatedFormData['member_type_id'];
             $sqlQury->start_date = $validatedFormData['start_date'];
             $sqlQury->end_date = $validatedFormData['end_date'];
             $sqlQury->status = $validatedFormData['status'];
             $sqlQury->is_delete = 0;
+            $sqlQury->remarks = $request['remarks'];
+            
             $sqlQury->save();
 
             return redirect()->route('society_member.index')->with('success', 'Record save successfully');
@@ -139,7 +147,12 @@ class SocietyMembersController extends Controller
             ->where('members.is_delete', 0)
             ->get();
 
-        return view('society_member.edit', ['results' => $results, 'societyResults' => $societyResults, 'memberResults' => $memberResults]);
+        $memberTypeResults = DB::table('member_types')
+            ->select('member_types.*')
+            ->where('member_types.is_delete', 0)
+            ->get();
+            
+        return view('society_member.edit', ['results' => $results, 'societyResults' => $societyResults, 'memberResults' => $memberResults,'memberTypeResults' => $memberTypeResults]);
     }
 
     /**
@@ -156,6 +169,7 @@ class SocietyMembersController extends Controller
         $validatedFormData = $request->validate([
             'society_id' => 'required|string|max:255',
             'member_id' => 'required|string|max:255',
+            'member_type_id' => 'required|string|max:255',
             'start_date' => 'required|string|max:255',
             'end_date' => 'required|string|max:255',            
             'status' => 'required|in:1,0',
@@ -169,10 +183,12 @@ class SocietyMembersController extends Controller
         if (is_null($isSocietyMembers)) {
             $sqlQury->society_id = $validatedFormData['society_id'];
             $sqlQury->member_id = $validatedFormData['member_id'];
+            $sqlQury->member_type_id = $validatedFormData['member_type_id'];
             $sqlQury->start_date = $validatedFormData['start_date'];
             $sqlQury->end_date = $validatedFormData['end_date'];
             $sqlQury->status = $validatedFormData['status'];
             $sqlQury->is_delete = 0;
+            $sqlQury->remarks = $request['remarks'];
             $sqlQury->save();
 
             return redirect()->route('society_member.index')->with('success', 'Record save successfully');

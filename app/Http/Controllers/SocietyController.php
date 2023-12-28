@@ -88,6 +88,9 @@ class SocietyController extends Controller
         $sqlQury->contact_no = $request['contact_no'];
         $sqlQury->contact_person = $request['contact_person'];
         $sqlQury->remarks = $request['remarks'];
+        $sqlQury->intrest_rate = $request['intrest_rate'];
+        $sqlQury->branch_code = $request['branch_code'];
+
         $sqlQury->is_delete = 0;
 
         $sqlQury->save();
@@ -160,6 +163,8 @@ class SocietyController extends Controller
         $sqlQury->contact_no = $request['contact_no'];
         $sqlQury->contact_person = $request['contact_person'];
         $sqlQury->remarks = $request['remarks'];
+        $sqlQury->intrest_rate = $request['intrest_rate'];
+        $sqlQury->branch_code = $request['branch_code'];
 
         $sqlQury->save();
         return redirect()->route('society.index')->with('success', 'Record updated successfully');

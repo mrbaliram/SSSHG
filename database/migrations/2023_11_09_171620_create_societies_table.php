@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->decimal('contribution_amount')->nullable();
             $table->decimal('maximum_loan_amount')->nullable();
+            $table->decimal('intrest_rate')->default('1');
             $table->dateTime('start_date', $precision = 0)->nullable(); 
             $table->string('contact_person')->nullable();
             $table->string('contact_no')->nullable();

@@ -14,14 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('society_members', function (Blueprint $table) {
-            $table->id();            
+            $table->id();
             $table->integer('society_id');
             $table->integer('member_id');
+            $table->integer('member_type_id');
             $table->dateTime('start_date', $precision = 0)->nullable(); 
             $table->dateTime('end_date', $precision = 0)->nullable(); 
             $table->tinyInteger('status')->default('1');
             $table->tinyInteger('is_delete')->default('0');
             $table->string('other_info')->nullable();
+            $table->mediumText('remarks')->nullable();
             $table->timestamps();
         });
     }

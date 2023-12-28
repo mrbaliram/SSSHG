@@ -56,13 +56,7 @@ class MemberController extends Controller
             ->where('members.is_delete', 0)
             ->get();
         $userResults = User::all();
-
         
-
-           
-            // 'adhar_card_url',
-            // 'photo_url',
-            
         return view('member.create', ['userResults' => $userResults, 'memberResults' => $memberResults]);
     }
 
@@ -98,6 +92,8 @@ class MemberController extends Controller
         $sqlQury->phone = $request['phone'];
         $sqlQury->pin_code = $request['pin_code'];
         $sqlQury->remarks = $request['remarks'];
+        $sqlQury->address2 = $request['address2'];
+        
 
         $sqlQury->guardian = $request['guardian'];
         $sqlQury->gender = $request['gender'];

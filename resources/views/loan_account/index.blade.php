@@ -43,10 +43,14 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
+                                    <th scope="col" class="px-6 py-3">Society Member</th>
                                     <th scope="col" class="px-6 py-3">Amount</th>
+                                    <th scope="col" class="px-6 py-3">Full Amount</th>
+                                    <th scope="col" class="px-6 py-3">Extra Amount</th>
+                                    <th scope="col" class="px-6 py-3">Need Refrence</th>
                                     <th scope="col" class="px-6 py-3">Rate of intrest</th>
                                     <th scope="col" class="px-6 py-3">Start Date</th>
-                                    <th scope="col" class="px-6 py-3">End Date</th>
+                                    <!-- <th scope="col" class="px-6 py-3">End Date</th> -->
                                     <th scope="col" class="px-6 py-3">Status</th>
                                     <th scope="col" class="px-6 py-3">Action
                                         <span class="sr-only">Edit</span>
@@ -58,8 +62,36 @@
                                 @foreach($results as $data)
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $data->memberName }} [{{ $data->societyCode }}]
+                                        </td>
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $data->amount }}
                                         </td>
+
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $data->full_amount }}
+                                        </td>
+
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $data->full_amount - $data->amount }}
+                                        </td>
+
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <?php
+                                                $needRef = ceil($data->full_amount / $data->amount) - 1;
+                                                if($needRef == 0) {
+                                            ?>
+                                               No need Refrence
+                                            <?php
+                                                }else{
+                                            ?>
+                                            <!-- {{ route('loan_account.edit', $data->id) }} -->
+                                            <a href="{{ route('loan_account.refrence', $data->id) }}" class="inline-flex items-center text-blue-600 hover:underline">Need {{ $needRef }} Refrence</a>
+                                            <?php
+                                                }
+                                            ?>
+                                        </td>
+
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $data->intrest_rate }}
                                         </td>
@@ -67,9 +99,9 @@
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ carbon\carbon::parse($data->start_date)->format('d-m-Y') }}
                                         </td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <!-- <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ carbon\carbon::parse($data->end_date)->format('d-m-Y') }}
-                                        </td>
+                                        </td> -->
                                         
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             @if($data->status == 1)
