@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('loan_accounts', function (Blueprint $table) {
             $table->id();
+            $table->integer('parent_id')->default('0');
             $table->integer('society_member_id');
-            $table->integer('society_member_reference_id');
+            $table->integer('society_member_reference_id')->default('0');
             $table->dateTime('start_date', $precision = 0)->nullable(); 
             $table->dateTime('end_date', $precision = 0)->nullable();
             $table->decimal('amount')->nullable();

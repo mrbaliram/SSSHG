@@ -76,6 +76,18 @@
                     </x-nav-link>
                 </div>
 
+                <!-- loan Payment loan_payment-->
+                @php $loan_payment_link_active = false;
+                    if(request()->routeIs('loan_payment.index') || request()->routeIs('loan_payment.create') || request()->routeIs('loan_payment.edit'))
+                        $loan_payment_link_active = true;
+                @endphp
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('loan_payment.index')" :active="$loan_payment_link_active">
+                        {{ __('Loan Payment') }}
+                    </x-nav-link>
+                </div>
+
 
             </div>
 

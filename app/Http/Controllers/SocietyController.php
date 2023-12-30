@@ -170,6 +170,8 @@ class SocietyController extends Controller
         return redirect()->route('society.index')->with('success', 'Record updated successfully');
     }
 
+    
+
     /**
      * Remove the specified resource from storage.
      *

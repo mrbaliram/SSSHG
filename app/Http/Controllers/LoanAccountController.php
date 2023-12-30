@@ -37,8 +37,11 @@ class LoanAccountController extends Controller
                 ->orderBy('loan_accounts.created_at', 'DESC')
                 ->paginate();
         }
-        
-        //dd($results);
+    //     $users = User::join('elanlar', 'elanlar.user_id', 'users.id')
+    // ->select([
+    //    'users.*', 
+    //     DB::raw('(SELECT COUNT(*) FROM elanlar WHERE elanlar.user_id = users.id) as elan_sayi')
+    // ])->where('elanlar.country_id', 19)->groupBy('users.id');
 
         return view('loan_account.index', compact('results'));
     }
@@ -146,34 +149,6 @@ class LoanAccountController extends Controller
 
         return view('loan_account.edit', ['results' => $results,'societyResults' => $societyResults, 'societyMembersResults' => $societyMembersResults]);
     }
-    //refrence
-    public function refrence($id)
-    {
-        
-        $results = DB::table('loan_accounts')
-                ->select('loan_accounts.*', 'societies.id as societyId','members.name as memberName')
-                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
-                ->join('societies','societies.id','=','society_members.society_id')
-                ->join('members','members.id','=','society_members.member_id')
-                ->where('loan_accounts.id', $id)
-                ->get();
-
-        $results = $results[0];
-        $societyMembersResults = DB::table('society_members')
-                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
-                ->join('societies','societies.id','=','society_members.society_id')
-                ->join('members','members.id','=','society_members.member_id')
-                ->where('society_members.is_delete', 0)
-                ->where('societies.id', $results->societyId)
-                ->get();
-
-        $societyResults = DB::table('societies')
-            ->select('societies.id', 'societies.name', 'societies.code', 'societies.maximum_loan_amount', 'societies.intrest_rate')
-            ->where('societies.id', $results->societyId)
-            ->get();
-
-        return view('loan_account.refrence', ['results' => $results,'societyResults' => $societyResults, 'societyMembersResults' => $societyMembersResults]);
-    }
     
 
     /**
@@ -205,6 +180,67 @@ class LoanAccountController extends Controller
         $sqlQury->is_delete = 0;
         $sqlQury->save();
 
+        return redirect()->route('loan_account.index')->with('success', 'Record save successfully');
+    }
+
+    //refrence
+    public function refrence($id)
+    {
+        
+        $results = DB::table('loan_accounts')
+                ->select('loan_accounts.*', 'societies.id as societyId','members.name as memberName')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_accounts.id', $id)
+                ->get();
+
+        $results = $results[0];
+        //society_member_id
+        $societyMembersResults = DB::table('society_members')
+                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('society_members.is_delete', 0)
+                ->where('societies.id', $results->societyId)
+                ->where('society_members.id','!=', $results->society_member_id)
+                ->get();
+
+        $societyResults = DB::table('societies')
+            ->select('societies.id', 'societies.name', 'societies.code', 'societies.maximum_loan_amount', 'societies.intrest_rate')
+            ->where('societies.id', $results->societyId)
+            ->get();
+
+        $allRefrences = DB::table('loan_accounts')
+                ->select('loan_accounts.*', 'societies.id as societyId','members.name as memberName')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_reference_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_accounts.parent_id', $id)
+                ->get();
+        
+        return view('loan_account.refrence', ['results' => $results,'societyResults' => $societyResults, 'societyMembersResults' => $societyMembersResults,'allRefrences' => $allRefrences]);
+    }
+    
+
+    // // add reference members
+    public function loan_account_refrence(Request $request, $id)
+    {
+        
+        for($i = 0; $i < $request['numOfRef']; $i++){
+            if($request['society_member_id'][$i] != 0){
+                
+                $sqlQury = new LoanAccount();
+                $sqlQury->amount = $request['amount'][$i];
+                $sqlQury->society_member_id = $request['parent_society_member_id'];
+                $sqlQury->society_member_reference_id = $request['society_member_id'][$i];
+                $sqlQury->parent_id = $id;
+                $sqlQury->status = 1;
+                $sqlQury->is_delete = 0;
+                $sqlQury->save();
+            }
+        }
+        
         return redirect()->route('loan_account.index')->with('success', 'Record save successfully');
     }
 

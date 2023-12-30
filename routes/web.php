@@ -6,6 +6,8 @@ use App\Http\Controllers\SocietyRuleController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SocietyMembersController;
 use App\Http\Controllers\ContributionPaymentController;
+use App\Http\Controllers\LoanPaymentController;
+
 use App\Http\Controllers\LoanAccountController;
 use App\Http\Controllers\CommonController;
 
@@ -115,8 +117,19 @@ Route::middleware('auth')->group(function () {
     Route::put('/loan_account/{id}', [LoanAccountController::class, 'update'])->name('loan_account.update');
 
     Route::get('/loan_account/{id}/refrence', [LoanAccountController::class, 'refrence'])->name('loan_account.refrence');
-    
-   // Route::put('/loan_account/{id}', [LoanAccountController::class, 'refrenceStore'])->name('loan_account.refrenceStore');
+    //loan_account_refrence
+    Route::put('/loan_account/{id}/loan_account_refrence', [LoanAccountController::class, 'loan_account_refrence'])->name('loan_account.loan_account_refrence');
+
+
+    // loan_payment - Controllers\LoanPaymentController.php
+    Route::get('/loan_payment', [LoanPaymentController::class, 'index'])->name('loan_payment.index');
+    Route::delete('/loan_payment/{id}', [LoanPaymentController::class, 'destroy'])->name('loan_payment.destroy');
+    Route::get('/loan_payment/{id}/show', [LoanPaymentController::class, 'show'])->name('loan_payment.show');
+    Route::get('/loan_payment/create', [LoanPaymentController::class, 'create'])->name('loan_payment.create');
+    Route::post('/loan_payment/store', [LoanPaymentController::class, 'store'])->name('loan_payment.store');
+    Route::get('/loan_payment/{id}/edit', [LoanPaymentController::class, 'edit'])->name('loan_payment.edit');
+    Route::put('/loan_payment/{id}', [LoanPaymentController::class, 'update'])->name('loan_payment.update');
+
 
 });
 
