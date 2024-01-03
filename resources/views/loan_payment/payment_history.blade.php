@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Society Member List') }}
+            {{ __('Loan Payment') }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -23,7 +23,7 @@
                     @endif
 
                     <div class="mb-4 flex justify-end">
-                        <form action="{{ route('society_member.index') }}" method="POST" class="inline">
+                        <form action="{{ route('loan_payment.index') }}" method="POST" class="inline">
                             @csrf
                             @method('GET')
                             <input id="search" name="search" type="text" placeholder="Search..">
@@ -33,7 +33,7 @@
                             </button>
                         </form>
 
-                        <a href="{{ route('society_member.create') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex">
+                        <a href="{{ route('loan_payment.create') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex">
                             <svg class="h-5 w-5 text-white-700"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="8" y1="12" x2="16" y2="12" /></svg>&nbsp;&nbsp;{{ __('Add') }}
                         </a>
                         
@@ -43,17 +43,11 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">Society</th>
-                                    <!-- <th scope="col" class="px-6 py-3">Member</th> -->
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                        Member
-                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                                        </svg></a>
-                                        </div>
-                                        </th>
-                                    <th scope="col" class="px-6 py-3">Start Date</th>
+                                    <th scope="col" class="px-6 py-3">Society Member</th>
+                                    <th scope="col" class="px-6 py-3">Paid Amount</th>
+                                    <th scope="col" class="px-6 py-3">Intrest Amount</th>
+                                    
+                                    <th scope="col" class="px-6 py-3">Pay Date</th>
                                     <th scope="col" class="px-6 py-3">Status</th>
                                     <th scope="col" class="px-6 py-3">Action
                                         <span class="sr-only">Edit</span>
@@ -63,16 +57,24 @@
                             
                             <tbody id="dataListTable">
                                 @foreach($results as $data)
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" id="row_id_{{$data->id}}">
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $data->societyName }}
-                                        </td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $data->memberName }}
-                                        </td>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ carbon\carbon::parse($data->start_date)->format('d-m-Y') }}
+                                            {{ $data->memberName }} [{{ $data->societyName }}]
+                                        </td>
+
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $data->paid_amount }}
+                                        </td>
+
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $data->intrest_amount }}
+                                        </td>
+
+
+
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ carbon\carbon::parse($data->pay_date)->format('d-m-Y') }}
                                         </td>
                                         
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -91,17 +93,17 @@
                                         <!-- Action button -->
                                         <td class="px-6 py-4 flex">
                                             <!-- Edit icon  -->
-                                            <a href="{{ route('society_member.edit', $data->id) }}" class="text-blue-600 hover:underline" title="Edit / Update">
+                                            <a href="{{ route('loan_payment.edit', $data->id) }}" class="text-blue-600 hover:underline" title="Edit / Update">
                                                 <svg class="h-6 w-6 text-blue-600"  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
                                             </a>&nbsp;&nbsp;
 
                                             <!-- Show details button  -->
-                                            <!-- <a title="show details" href="{{ route('society_member.show', $data->id) }}" class="text-blue-600 hover:underline">
+                                            <!-- <a title="show details" href="{{ route('loan_payment.show', $data->id) }}" class="text-blue-600 hover:underline">
                                                 <svg class="h-6 w-6 text-blue-600"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="16" x2="12" y2="12" />  <line x1="12" y1="8" x2="12.01" y2="8" /></svg>
                                             </a>&nbsp;&nbsp; -->
 
                                             <!-- Delete icon button  -->
-                                            <form action="{{ route('society_member.destroy', $data->id) }}" method="POST" class="inline">
+                                            <form action="{{ route('loan_payment.destroy', $data->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button title="Delete this record" onclick="return confirm('Are you sure, you want to delete this item?')" type="submit" class="confirm-button text-red-600 hover:underline">

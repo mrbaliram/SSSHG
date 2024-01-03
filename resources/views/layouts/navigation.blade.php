@@ -64,9 +64,9 @@
                     </x-nav-link>
                 </div>
 
-                <!-- loan_account -->
+                <!-- loan_account  refrence-->
                 @php $loan_account_link_active = false;
-                    if(request()->routeIs('loan_account.index') || request()->routeIs('loan_account.create') || request()->routeIs('loan_account.edit'))
+                    if(request()->routeIs('loan_account.index') || request()->routeIs('loan_account.create') || request()->routeIs('loan_account.edit') || request()->routeIs('loan_account.show')  || request()->routeIs('loan_account.refrence'))
                         $loan_account_link_active = true;
                 @endphp
 

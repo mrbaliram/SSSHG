@@ -78,7 +78,14 @@ class LoanPaymentController extends Controller
                 ->orderBy('loan_accounts.created_at', 'DESC')
                 ->get();
        
-        return view('loan_payment.add', ['loanAccountResult' => $loanAccountResult]);
+        $loan_paymentsTotal = DB::table('loan_payments')
+                ->select('loan_payments.loan_account_id', DB::raw('SUM(paid_amount) as total_paid_amount'), DB::raw('SUM(intrest_amount) as total_intrest_amount'))
+                ->groupBy('loan_account_id')
+                ->where('is_delete', 0)
+                ->get();
+
+        //dd($loan_paymentsTotal );
+        return view('loan_payment.add', ['loanAccountResult' => $loanAccountResult, 'loan_paymentsTotal' => $loan_paymentsTotal]);
     }
 
     /**

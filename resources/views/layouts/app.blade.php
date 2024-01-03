@@ -12,7 +12,11 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!--@vite(['resources/css/app.css', 'resources/js/app.js'])-->
+          <link href="http://ssshg.3dotsmatic.com//build/assets/app-5339f3b7.css" rel="stylesheet" />
+          <script src="http://ssshg.3dotsmatic.com//build/assets/app-52d7c240.js" async defer type="javascript"></script>
+          <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+          <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">

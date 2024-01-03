@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\LoanAccount;
+use App\Models\LoanPayment;
+
 use App\Http\Requests\StoreLoanAccountRequest;
 use App\Http\Requests\UpdateLoanAccountRequest;
 use Illuminate\Http\Request;
@@ -21,10 +23,15 @@ class LoanAccountController extends Controller
         if($request['search'] != null){
             $searchVal = $request['search'];
              $results = DB::table('loan_accounts')
-                ->select('loan_accounts.*', 'societies.name as societyName','members.name as memberName')
+                ->select('loan_accounts.*', 'societies.code as societyCode','members.name as memberName')
                 ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
+                ->where(function($query) use ($searchVal) {
+                    $query->where('societies.name', 'like', '%' . $searchVal . '%')
+                    ->orWhere('societies.code', 'like', '%' . $searchVal . '%')
+                    ->orWhere('members.name', 'like', '%' . $searchVal . '%');
+                })
                 ->where('loan_accounts.is_delete', 0)
                 ->paginate();
         }else{
@@ -37,13 +44,36 @@ class LoanAccountController extends Controller
                 ->orderBy('loan_accounts.created_at', 'DESC')
                 ->paginate();
         }
+
+
+        $loan_paymentsTotal = DB::table('loan_payments')
+                ->select('loan_payments.loan_account_id', DB::raw('SUM(paid_amount) as total_paid_amount'), DB::raw('SUM(intrest_amount) as total_intrest_amount'))
+                ->groupBy('loan_account_id')
+                ->where('is_delete', 0)
+                ->get();
+
+        //dd( $loan_paymentsTotal);
+       // DB::raw('SUM(price) as total_sales')
+
+        //$loanPayment = LoanPayment::Where('loan_payments',true)
+        // $loanPayment = DB::table('loan_accounts')
+        //     ->selectRaw("SUM(loan_accounts.paid_amount) as total_paid_amount")
+        //     ->selectRaw("SUM(loan_accounts.intrest_amount) as total_intrest_amount")
+        //     ->groupBy('loan_accounts.loan_account_id')
+        //     ->get();
+
+        //     dd($loanPayment);
+
     //     $users = User::join('elanlar', 'elanlar.user_id', 'users.id')
     // ->select([
     //    'users.*', 
     //     DB::raw('(SELECT COUNT(*) FROM elanlar WHERE elanlar.user_id = users.id) as elan_sayi')
     // ])->where('elanlar.country_id', 19)->groupBy('users.id');
+                //loan_paymentsTotal
+        //return view('loan_account.index', compact('results'));
 
-        return view('loan_account.index', compact('results'));
+         return view('loan_account.index', ['results' => $results, 'loan_paymentsTotal' => $loan_paymentsTotal]);
+
     }
 
     /**
@@ -111,9 +141,59 @@ class LoanAccountController extends Controller
      * @param  \App\Models\LoanAccount  $loanAccount
      * @return \Illuminate\Http\Response
      */
-    public function show(LoanAccount $loanAccount)
+    public function show($id)
     {
         //
+        $loan_paymentsResults = DB::table('loan_payments')
+                ->select('loan_payments.*', 'societies.name as societyName','members.name as memberName')
+                
+                ->join('loan_accounts','loan_accounts.id','=','loan_payments.loan_account_id')
+
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+
+                ->where('loan_payments.is_delete', 0)
+                ->where('loan_payments.loan_account_id', $id)
+                ->orderBy('loan_payments.created_at', 'Desc')
+                ->paginate();
+
+        $results = DB::table('loan_accounts')
+                ->select('loan_accounts.*', 'societies.id as societyId','members.name as memberName')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_accounts.id', $id)
+                ->get();
+
+        $results = $results[0];
+        //society_member_id
+        $societyMembersResults = DB::table('society_members')
+                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('society_members.is_delete', 0)
+                ->where('societies.id', $results->societyId)
+                ->where('society_members.id','!=', $results->society_member_id)
+                ->get();
+
+        $societyResults = DB::table('societies')
+            ->select('societies.id', 'societies.name', 'societies.code', 'societies.maximum_loan_amount', 'societies.intrest_rate')
+            ->where('societies.id', $results->societyId)
+            ->get();
+
+        $allRefrences = DB::table('loan_accounts')
+                ->select('loan_accounts.*', 'societies.id as societyId','members.name as memberName')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_reference_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_accounts.parent_id', $id)
+                ->get();
+        
+        return view('loan_account.payment_history', ['results' => $results,'societyResults' => $societyResults, 'societyMembersResults' => $societyMembersResults,'allRefrences' => $allRefrences, 'loan_paymentsResults' => $loan_paymentsResults]);
+
+
+       //return view('loan_account.payment_history', ['results' => $results]);
     }
 
     /**

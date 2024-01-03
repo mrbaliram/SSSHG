@@ -44,6 +44,7 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">Society Member</th>
+                                    <th scope="col" class="px-6 py-3">Any Loan</th>
                                     <th scope="col" class="px-6 py-3">Amount</th>
                                     <th scope="col" class="px-6 py-3">Late Fine</th>
                                     <th scope="col" class="px-6 py-3">Pay Month</th>
@@ -62,6 +63,29 @@
                                         
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $data->memberName }} [{{ $data->societyName }}]
+                                        </td>
+
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <!-- society_member_id -->
+                                            <?php
+                                                $loanAmount = 0;
+                                            ?>
+                                            @foreach($societyMembersLoan as $loanData)
+                                                @if($loanData->society_member_id == $data->society_member_id)
+                                                    <?php 
+
+                                                        $loanAmount = $loanData->total_loan_taken;
+                                                        // $loandPaid = $paymentData->total_paid_amount;
+                                                        // $intPaid = $paymentData->total_intrest_amount;
+
+                                                        // $over_all_loandPaid += $loandPaid;
+                                                        // $over_all_intPaid += $intPaid;
+                                                    ?>
+                                                    
+                                                @endif
+                                            @endforeach
+
+                                            {{$loanAmount}}
                                         </td>
 
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">

@@ -46,9 +46,17 @@ class ContributionPaymentController extends Controller
                 ->paginate();
         }
         
-        //dd($results);
+        $societyMembersLoan = DB::table('loan_accounts')
+                ->select('loan_accounts.society_member_id', DB::raw('SUM(full_amount) as total_loan_taken'))
+                ->groupBy('society_member_id')
+                ->where('is_delete', 0)
+                ->where('society_member_reference_id', 0)
+                ->get();
 
-        return view('contribution_payment.index', compact('results'));
+        //dd($societyMembersLoan);
+
+        //return view('contribution_payment.index', compact('results'));
+        return view('contribution_payment.index', ['results' => $results, 'societyMembersLoan' => $societyMembersLoan]);
     }
 
     /**
@@ -58,7 +66,11 @@ class ContributionPaymentController extends Controller
      */
     public function create()
     {
-        $results = null;
+        //$results = null;
+        $societyResults = DB::table('societies')
+            ->select('societies.id', 'societies.name', 'societies.code', 'societies.maximum_loan_amount', 'societies.intrest_rate')
+            ->where('societies.is_delete', 0)
+            ->get();
         $societyMembersResults = DB::table('society_members')
                 ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
                 ->join('societies','societies.id','=','society_members.society_id')
@@ -66,7 +78,17 @@ class ContributionPaymentController extends Controller
                 ->where('society_members.is_delete', 0)
                 ->get();
 
-        return view('contribution_payment.add', ['societyMembersResults' => $societyMembersResults]);
+        $results = DB::table('contribution_payments')
+                ->select('contribution_payments.*', 'societies.name as societyName','members.name as memberName')
+                ->join('society_members','society_members.id','=','contribution_payments.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('contribution_payments.is_delete', 0)
+                ->orderBy('contribution_payments.created_at', 'DESC')
+                ->limit(10)
+                ->get();
+
+        return view('contribution_payment.add', ['societyMembersResults' => $societyMembersResults,'societyResults' => $societyResults, 'results' => $results]);
     }
 
     /**
@@ -77,6 +99,7 @@ class ContributionPaymentController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedFormData = $request->validate([
             'society_member_id' => 'required|string|max:255',
             'amount' => 'required|string|max:255',
@@ -105,13 +128,42 @@ class ContributionPaymentController extends Controller
             $sqlQury->is_delete = 0;
             $sqlQury->save();
 
-            return redirect()->route('contribution_payment.index')->with('success', 'Record save successfully');
+            if($request['saveBtn'] != null){
+                return redirect()->route('contribution_payment.index')->with('success', 'Record save successfully');
+            }else{
+
+                $results = DB::table('contribution_payments')
+                ->select('contribution_payments.*', 'societies.name as societyName','members.name as memberName')
+                ->join('society_members','society_members.id','=','contribution_payments.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('contribution_payments.is_delete', 0)
+                ->orderBy('contribution_payments.created_at', 'Desc')
+                ->limit(10)
+                ->get();
+
+                //session_pay_for_year  session_pay_for_month session_pay_date session_amount session_late_fine session_society_id
+
+                return redirect()->route('contribution_payment.create')->with( [
+                    'success' => 'Record save successfully',
+                    'results' => $results,
+                    'session_society_id' => $request['society_id'],
+                    'session_amount' => $request['amount'],
+                    'session_late_fine' => $request['late_fine'], 
+                    'session_pay_for_month' => $request['pay_for_month'], 
+                    'session_pay_for_year' => $request['pay_for_year'], 
+                    'session_pay_date' => $request['pay_date']
+                ]);
+
+            }
 
         }else{
 
             return redirect()->route('contribution_payment.create')->with('error', 'Record already exists');
 
         }
+
+
     }
 
     /**
