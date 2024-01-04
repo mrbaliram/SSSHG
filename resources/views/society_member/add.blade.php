@@ -16,6 +16,24 @@
                     return true; 
                 }
             });
+
+            // filter society member
+            $('#society_id').change(function() {
+              
+              if($(this).val() != ''){ //loanpaid="" data-intpaid                    
+                    //$society_code_branch = parseInt($(this).find('option:selected').attr('data-intpaid'));
+                    $("#account_nummber").val($(this).find('option:selected').attr('data-acountnumber'));
+                }else{
+                    $("#account_nummber").val('');
+                }
+                
+                //$("#paid_amount").val($minAmount);
+
+              // var $options = $('#society_member_id').val('').find('option').show();
+              // if (this.value != '')
+              //   $options.not('[data-val="' + this.value + '"],[data-val=""]').hide();
+            })
+
         });
     </script>
     
@@ -54,9 +72,10 @@
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="society_id" class="block text-gray-600 font-medium">Select Society<span style="color:red"> *</span></label>
                                 <select id="society_id" name="society_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                    <option value="">--Choose one option--</option>
+                                    <!-- 'societies.code', 'societies.branch_code' -->
+                                    <option value="" data-acountnumber="">--Choose one option--</option>
                                     @foreach($societyResults as $societyData)
-                                        <option value="{{ $societyData->id }}" > {{ $societyData->name }} [{{ $societyData->code }}]</option>
+                                        <option value="{{ $societyData->id }}" data-acountnumber="{{$societyData->code}}-BR00{{$societyData->branch_code}}"> {{ $societyData->name }} [{{ $societyData->code }}]</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -105,18 +124,27 @@
                             </div>
                         </div>
 
-                        <div class="flex">
-                            <div class="flex items-center mr-4">
-                                <label class="block text-gray-600 font-medium">Status<span style="color:red"> *</span></label>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="Your Account Number" class="block text-gray-600 font-medium">Your Account Number</label>
+                                <input type="text" name="account_nummber" id="account_nummber" value="" class="border rounded-md w-full py-2 px-3 text-gray-700">
                             </div>
-                            <div class="flex items-center mr-4">
-                                 <input type="radio" name="status" id="active" value="1" checked class="mr-2">
-                                 <label for="inactive" class="text-gray-700">Yes</label>
+
+                            <div class="relative z-0 w-full mb-6 group flex">
+                                <div class="flex items-center mr-4">
+                                    <label class="block text-gray-600 font-medium">Status<span style="color:red"> *</span></label>
+                                </div>
+                                <div class="flex items-center mr-4">
+                                     <input type="radio" name="status" id="active" value="1" checked class="mr-2">
+                                     <label for="inactive" class="text-gray-700">Yes</label>
+                                </div>
+                                <div class="flex items-center mr-4">
+                                    <input type="radio" name="status" id="inactive" value="0"  class="mr-2">
+                                    <label for="inactive" class="text-gray-700">No</label>
+                                </div>
                             </div>
-                            <div class="flex items-center mr-4">
-                                <input type="radio" name="status" id="inactive" value="0"  class="mr-2">
-                                <label for="inactive" class="text-gray-700">No</label>
-                            </div>
+                            
                         </div>
 
                         <div class="mb-4" align="center">

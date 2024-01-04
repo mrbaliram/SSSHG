@@ -55,7 +55,7 @@ class SocietyMembersController extends Controller
         //
         $results = null;
         $societyResults = DB::table('societies')
-            ->select('societies.id', 'societies.name', 'societies.code')
+            ->select('societies.id', 'societies.name', 'societies.code', 'societies.branch_code')
             ->where('societies.is_delete', 0)
             ->get();
 
@@ -85,15 +85,20 @@ class SocietyMembersController extends Controller
         $validatedFormData = $request->validate([
             'society_id' => 'required|string|max:255',
             'member_id' => 'required|string|max:255',
+            'account_nummber' => 'required|string|max:255',
             'member_type_id' => 'required|string|max:255',
             'start_date' => 'required|string|max:255',
             'end_date' => 'required|string|max:255',            
             'status' => 'required|in:1,0',
         ]);
 
-         $isSocietyMembers = SocietyMembers::where('society_id', $validatedFormData['society_id'])
+        //generate account_nummber
+        $memberCountBySociety = SocietyMembers::where('society_id', $validatedFormData['society_id'])->count() + 1;
+        $newAccountNumber = $validatedFormData['account_nummber'].'-0'.$memberCountBySociety;
+        $isSocietyMembers = SocietyMembers::where('society_id', $validatedFormData['society_id'])
                                 ->where('member_id', $validatedFormData['member_id'])
                                 ->first();
+
         if (is_null($isSocietyMembers)) {
             $sqlQury = new SocietyMembers();             
             $sqlQury->society_id = $validatedFormData['society_id'];
@@ -101,6 +106,7 @@ class SocietyMembersController extends Controller
             $sqlQury->member_type_id = $validatedFormData['member_type_id'];
             $sqlQury->start_date = $validatedFormData['start_date'];
             $sqlQury->end_date = $validatedFormData['end_date'];
+            $sqlQury->account_nummber = $newAccountNumber;
             $sqlQury->status = $validatedFormData['status'];
             $sqlQury->is_delete = 0;
             $sqlQury->remarks = $request['remarks'];
@@ -181,7 +187,7 @@ class SocietyMembersController extends Controller
                                 ->first();
         //dd($isSocietyMembers);
         if (is_null($isSocietyMembers)) {
-            $sqlQury->society_id = $validatedFormData['society_id'];
+            //$sqlQury->society_id = $validatedFormData['society_id'];
             $sqlQury->member_id = $validatedFormData['member_id'];
             $sqlQury->member_type_id = $validatedFormData['member_type_id'];
             $sqlQury->start_date = $validatedFormData['start_date'];

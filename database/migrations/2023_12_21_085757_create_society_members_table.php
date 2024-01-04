@@ -19,7 +19,8 @@ return new class extends Migration
             $table->integer('member_id');
             $table->integer('member_type_id');
             $table->dateTime('start_date', $precision = 0)->nullable(); 
-            $table->dateTime('end_date', $precision = 0)->nullable(); 
+            $table->dateTime('end_date', $precision = 0)->nullable();
+            $table->string('account_nummber')->nullable();
             $table->tinyInteger('status')->default('1');
             $table->tinyInteger('is_delete')->default('0');
             $table->string('other_info')->nullable();

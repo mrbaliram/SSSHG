@@ -57,22 +57,11 @@
                             </div>
                         </div>
                         
-                        <div class="grid md:grid-cols-2 md:gap-6">
-                            <div class="relative z-0 w-full mb-6 group">
-                                <label for="contribution_amount" class="block text-gray-600 font-medium">Contribution Amount <span id="contribution_amount" style="color: green;"></span></label>
-                                <input id="contribution_amount" type="number" name="contribution_amount" value="500" class="border rounded-md w-full py-2 px-3 text-gray-700">
-                            </div>
-                            <div class="relative z-0 w-full mb-6 group">
-                                <label for="maximum_loan_amount" class="block text-gray-600 font-medium">Maximum Loan Amount</label>
-                                <input id="maximum_loan_amount" type="number" name="maximum_loan_amount" value="5000" class="border rounded-md w-full py-2 px-3 text-gray-700">
-                            </div>
-                        </div>
-
                         <!-- Branch Code and Rate of intrest -->
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <label for="branch_code" class="block text-gray-600 font-medium">Branch Code</span></label>
-                                <input id="branch_code" type="number" name="branch_code" value="" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                                <label for="branch_code" class="block text-gray-600 font-medium">Branch Code<span style="color:red"> *</span></span></label>
+                                <input id="branch_code" type="number" name="branch_code" value="" class="border rounded-md w-full py-2 px-3 text-gray-700" required>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="intrest_rate" class="block text-gray-600 font-medium">Intrest Rate</label>
@@ -81,6 +70,17 @@
                                     <option value="2"> 2 </option>
                                     <option value="3"> 3 </option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="contribution_amount" class="block text-gray-600 font-medium">Contribution Amount <span id="contribution_amount" style="color: green;"></span></label>
+                                <input id="contribution_amount" type="number" name="contribution_amount" value="500" class="border rounded-md w-full py-2 px-3 text-gray-700">
+                            </div>
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="maximum_loan_amount" class="block text-gray-600 font-medium">Maximum Loan Amount (Set loan Limit)</label>
+                                <input id="maximum_loan_amount" type="number" name="maximum_loan_amount" value="5000" class="border rounded-md w-full py-2 px-3 text-gray-700">
                             </div>
                         </div>
 
