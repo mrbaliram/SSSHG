@@ -43,6 +43,17 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+    /// user/user list view suer_profile
+    Route::get('/user', [ProfileController::class, 'index'])->name('user.index');
+    Route::get('/user/add', [ProfileController::class, 'add'])->name('user.add');
+    Route::post('/user', [ProfileController::class, 'store'])->name('user.store');
+    Route::get('/user/{user}/edit', [ProfileController::class, 'edit_user'])->name('user.edit');
+    Route::put('/user/{user}', [ProfileController::class, 'update_user'])->name('user.update');
+
+    Route::put('/user/{user}', [ProfileController::class, 'update_user'])->name('user.update');
+    Route::delete('/user/{user}', [ProfileController::class, 'delete_user'])->name('user.delete');
+    
     // society adde edit delete show 
     Route::get('/society', [SocietyController::class, 'index'])->name('society.index');
     Route::delete('/society/{id}', [SocietyController::class, 'destroy'])->name('society.destroy');

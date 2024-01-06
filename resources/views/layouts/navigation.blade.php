@@ -88,6 +88,18 @@
                     </x-nav-link>
                 </div>
 
+                <!-- volunteer_book_check -->
+                @php $user_profile = false;
+                if(request()->routeIs('user.index') || request()->routeIs('book.user_book_check') || request()->routeIs('user.edit') || request()->routeIs('user.add'))
+                   $user_profile = true;
+                @endphp
+                
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('user.index')" :active="$user_profile">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                </div>
+               
 
             </div>
 

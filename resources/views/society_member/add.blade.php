@@ -27,11 +27,17 @@
                     $("#account_nummber").val('');
                 }
                 
-                //$("#paid_amount").val($minAmount);
+                //$("#paid_amount").val($minAmount); member_id
 
-              // var $options = $('#society_member_id').val('').find('option').show();
-              // if (this.value != '')
-              //   $options.not('[data-val="' + this.value + '"],[data-val=""]').hide();
+              var $options = $('#member_id').val('').find('option').show();
+              if (this.value != ''){
+                 // $options.not('[data-val="' + this.value + '"],[data-val="0"]').hide();
+                //$("#member_id option[data-value='" + this.value + "']").hide();
+
+                    $("#member_id option[data-val=" + this.value + "]").hide();
+
+
+                }
             })
 
         });
@@ -86,7 +92,7 @@
                                 <select id="member_id" name="member_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="">--Choose one option--</option>
                                     @foreach($memberResults as $memberData)
-                                        <option value="{{ $memberData->id }}" > {{ $memberData->name }} [{{ $memberData->guardian }}]</option>
+                                        <option  data-val="{{$memberData->society_id ?? 0}}" value="{{ $memberData->id }}" > {{ $memberData->name }} ({{ $memberData->guardian }}) [{{$memberData->societyCode ?? 'Still not in any Society'}}]</option>
                                     @endforeach
                                 </select>
                             </div>

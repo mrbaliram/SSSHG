@@ -53,6 +53,21 @@ class SocietyMembersController extends Controller
     public function create()
     {
         //
+        // for testing
+
+        // $memberResults2 = DB::table('members')
+        //     ->select('members.*', 'society_members.society_id as society_id33')
+        //     ->leftJoin('society_members','society_members.member_id','=','members.id')
+        //     //->wherenotNull('society_members.member_id')
+        //     ->where('members.is_delete', 0)
+        //     ->get();
+
+        // dd($memberResults2);
+
+        // ->leftJoin('enrollments','enrollments.student_id','=','students.id')
+        // ->whereNull('enrollments.student_id')
+
+        // end
         $results = null;
         $societyResults = DB::table('societies')
             ->select('societies.id', 'societies.name', 'societies.code', 'societies.branch_code')
@@ -60,7 +75,9 @@ class SocietyMembersController extends Controller
             ->get();
 
         $memberResults = DB::table('members')
-            ->select('members.*')
+            ->select('members.id', 'members.name','members.guardian','society_members.member_id', 'society_members.society_id','societies.code as societyCode')
+            ->leftJoin('society_members','society_members.member_id','=','members.id')
+            ->leftJoin('societies','society_members.society_id','=','societies.id')
             ->where('members.is_delete', 0)
             ->get();
 
