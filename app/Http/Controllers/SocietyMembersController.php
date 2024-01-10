@@ -22,7 +22,7 @@ class SocietyMembersController extends Controller
         if($request['search'] != null){
             $searchVal = $request['search'];
             $results = DB::table('society_members')
-                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
+                ->select('society_members.*', 'societies.code as societyCode','members.name as memberName')
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
                 ->where(function($query) use ($searchVal) {
@@ -33,10 +33,11 @@ class SocietyMembersController extends Controller
                 ->paginate();
         }else{
             $results = DB::table('society_members')
-                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
+                ->select('society_members.*', 'societies.code as societyCode','members.name as memberName')
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
                 ->where('society_members.is_delete', 0)
+                ->orderBy('society_members.account_nummber', 'DESC')
                 ->paginate();
         }
         
@@ -111,7 +112,14 @@ class SocietyMembersController extends Controller
 
         //generate account_nummber
         $memberCountBySociety = SocietyMembers::where('society_id', $validatedFormData['society_id'])->count() + 1;
-        $newAccountNumber = $validatedFormData['account_nummber'].'-0'.$memberCountBySociety;
+        $year = now()->format("y") - 1 ;
+        //dd($year);
+        if($memberCountBySociety < 10){
+            $newAccountNumber = $validatedFormData['account_nummber'].'-'.$year.'0'.$memberCountBySociety;
+        }else{
+            $newAccountNumber = $validatedFormData['account_nummber'].'-'.$year.$memberCountBySociety;
+        }
+        
         $isSocietyMembers = SocietyMembers::where('society_id', $validatedFormData['society_id'])
                                 ->where('member_id', $validatedFormData['member_id'])
                                 ->first();
@@ -145,9 +153,30 @@ class SocietyMembersController extends Controller
      * @param  \App\Models\SocietyMembers  $societyMembers
      * @return \Illuminate\Http\Response
      */
-    public function show(SocietyMembers $societyMembers)
+    public function show($id)
     {
-        //
+        $results = DB::table('society_members')
+                ->select('society_members.*', 'societies.code as societyCode' , 'societies.name as societyName','members.name as memberName')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('society_members.id', $id)
+                ->get();
+        $contriButionHistoryResults = DB::table('contribution_payments')
+                ->select('contribution_payments.*', 'societies.name as societyName','members.name as memberName')
+                ->join('society_members','society_members.id','=','contribution_payments.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('contribution_payments.society_member_id', $id)
+                ->orderBy('contribution_payments.created_at', 'DESC')
+                ->limit(10)
+                ->get();
+
+        return view('society_member.show', ['results' => $results[0], 'contriButionHistoryResults' => $contriButionHistoryResults]);
+
+        // return view('society_member.show', [
+        //     'results' => $results[0],
+        //     'contriButionHistoryResults' => $contriButionHistoryResults
+        // ]);
     }
 
     /**
@@ -210,6 +239,7 @@ class SocietyMembersController extends Controller
             $sqlQury->start_date = $validatedFormData['start_date'];
             $sqlQury->end_date = $validatedFormData['end_date'];
             $sqlQury->status = $validatedFormData['status'];
+            $sqlQury->account_nummber = $request['account_nummber'];
             $sqlQury->is_delete = 0;
             $sqlQury->remarks = $request['remarks'];
             $sqlQury->save();

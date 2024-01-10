@@ -84,8 +84,19 @@ class LoanPaymentController extends Controller
                 ->where('is_delete', 0)
                 ->get();
 
+         $results = DB::table('loan_payments')
+                ->select('loan_payments.*', 'societies.name as societyName','members.name as memberName')
+                ->join('loan_accounts','loan_accounts.id','=','loan_payments.loan_account_id')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_payments.is_delete', 0)
+                ->orderBy('loan_payments.created_at', 'Desc')
+                ->limit(10)
+                ->get();
+
         //dd($loan_paymentsTotal );
-        return view('loan_payment.add', ['loanAccountResult' => $loanAccountResult, 'loan_paymentsTotal' => $loan_paymentsTotal]);
+        return view('loan_payment.add', ['loanAccountResult' => $loanAccountResult, 'loan_paymentsTotal' => $loan_paymentsTotal, 'results' => $results]);
     }
 
     /**
@@ -112,8 +123,31 @@ class LoanPaymentController extends Controller
         $sqlQury->status = $validatedFormData['status'];
         $sqlQury->save();
 
-        return redirect()->route('loan_payment.index')->with('success', 'Record save successfully');
+        if($request['saveBtn'] != null){
+            return redirect()->route('loan_payment.index')->with('success', 'Record save successfully');
+        }else{
 
+            $results = DB::table('loan_payments')
+                ->select('loan_payments.*', 'societies.name as societyName','members.name as memberName')
+                ->join('loan_accounts','loan_accounts.id','=','loan_payments.loan_account_id')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_payments.is_delete', 0)
+                ->orderBy('loan_payments.created_at', 'Desc')
+                ->limit(10)
+                ->get();
+
+                return redirect()->route('loan_payment.create')->with( [
+                    'success' => 'Record save successfully',
+                    'results' => $results,
+                    'session_loan_account_id' => $request['loan_account_id'],
+                    'session_paid_amount' => $request['paid_amount'],
+                    'session_intrest_amount' => $request['intrest_amount'],
+                    'session_pay_date' => $request['pay_date']
+                ]);
+
+        }
     }
 
     /**

@@ -20,16 +20,7 @@
                     </x-nav-link>
                 </div>
                 <!-- Navigation Links -->
-                @php $society_link_active = false;
-                    if(request()->routeIs('society.index') || request()->routeIs('society.create') || request()->routeIs('society.edit') || request()->routeIs('society.show'))
-                        $society_link_active = true;
-                @endphp
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('society.index')" :active="$society_link_active">
-                        {{ __('Societies') }}
-                    </x-nav-link>
-                </div>
+                
 
                 @php $member_link_active = false;
                     if(request()->routeIs('member.index') || request()->routeIs('member.create') || request()->routeIs('member.edit') || request()->routeIs('member.show'))
@@ -90,7 +81,7 @@
 
                 <!-- volunteer_book_check -->
                 @php $user_profile = false;
-                if(request()->routeIs('user.index') || request()->routeIs('book.user_book_check') || request()->routeIs('user.edit') || request()->routeIs('user.add'))
+                if(request()->routeIs('user.index') ||  request()->routeIs('user.edit') || request()->routeIs('user.add'))
                    $user_profile = true;
                 @endphp
                 
@@ -99,12 +90,48 @@
                         {{ __('Users') }}
                     </x-nav-link>
                 </div>
-               
+
 
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
+
+
+                <!-- start  - drop down menu for Reports------------------- -->
+                <x-dropdown align="right" width="48">
+                    <x-slot name="trigger">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <div>Reports </div>
+                            <div class="ml-1">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content" :active="true">
+
+                        <x-dropdown-link :href="route('reports.contribution')">
+                            {{ __('All Contribution Reports') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('reports.loan')">
+                            {{ __('All Loan Reports') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('reports.member')">
+                            {{ __('All Member Reports') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('reports.member_monthly')">
+                            {{ __('Monthly Reports') }}
+                        </x-dropdown-link>
+
+                    </x-slot>
+                </x-dropdown>
+
 
                 <!-- start  - drop down menu for setting -------------- -->
                 <x-dropdown align="right" width="48">
@@ -121,6 +148,11 @@
                     </x-slot>
 
                     <x-slot name="content" :active="true">
+
+                        <x-dropdown-link :href="route('society.index')">
+                            {{ __('Societies') }}
+                        </x-dropdown-link>
+
                         <x-dropdown-link :href="route('member_type.index')">
                             {{ __('Member Type') }}
                         </x-dropdown-link>

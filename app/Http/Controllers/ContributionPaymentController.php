@@ -71,12 +71,44 @@ class ContributionPaymentController extends Controller
             ->select('societies.id', 'societies.name', 'societies.code', 'societies.maximum_loan_amount', 'societies.intrest_rate')
             ->where('societies.is_delete', 0)
             ->get();
+
         $societyMembersResults = DB::table('society_members')
                 ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
                 ->where('society_members.is_delete', 0)
                 ->get();
+
+      
+        $memberLoanPayment = DB::table('loan_payments')
+                ->select('loan_payments.loan_account_id', DB::raw('SUM(loan_payments.paid_amount) as total_paid_amount'), DB::raw('SUM(loan_payments.intrest_amount) as total_intrest_amount'))
+                
+                ->groupBy('loan_payments.loan_account_id')
+                ->where('loan_payments.is_delete', 0)
+                ->get();
+
+                
+
+         $memberLoanAccount = DB::table('loan_accounts')
+                ->select('loan_accounts.full_amount','loan_accounts.society_member_id','loan_accounts.id')
+                ->where('loan_accounts.is_delete', 0)
+                ->where('loan_accounts.parent_id', 0)
+                ->get();
+
+                $laon_account_id_arr = array();
+                $laonPay_member_arr = array();
+                $memberLoanAccount_arr = array();
+                foreach ($memberLoanAccount as $value) {
+                    $memberLoanAccount_arr[$value->society_member_id] = $value->full_amount;
+                    $laon_account_id_arr[$value->society_member_id] = $value->id;
+                    foreach ($memberLoanPayment as $payValue) {
+                        //print_r($payValue);
+                        if($value->id == $payValue->loan_account_id){
+                            $laonPay_member_arr[$value->society_member_id] = $payValue->total_paid_amount;
+                        }
+                    }
+                }
+               // dd($laonPay_member_arr);
 
         $results = DB::table('contribution_payments')
                 ->select('contribution_payments.*', 'societies.name as societyName','members.name as memberName')
@@ -88,7 +120,14 @@ class ContributionPaymentController extends Controller
                 ->limit(10)
                 ->get();
 
-        return view('contribution_payment.add', ['societyMembersResults' => $societyMembersResults,'societyResults' => $societyResults, 'results' => $results]);
+        return view('contribution_payment.add', [
+            'societyMembersResults' => $societyMembersResults,
+            'societyResults' => $societyResults,
+            'laonPay_member_arr' => $laonPay_member_arr, 
+            'memberLoanAccount_arr' => $memberLoanAccount_arr,
+            'laon_account_id_arr' => $laon_account_id_arr,
+            'results' => $results
+        ]);
     }
 
     /**

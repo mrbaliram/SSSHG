@@ -15,19 +15,48 @@
 
             // filter society member
             $('#society_id').change(function() {
-              //alert($(this).data("val") );
-              // var $getMaxLoanAmount2Member = $(this).find(':selected').data("val");
-              // var $societyIntrestRate = $(this).find(':selected').data("intrest_rate");
-              // //amount $getMaxLoanAmount2Member
-              // $('#amount').val($getMaxLoanAmount2Member);
-              // $('#full_amount').val($getMaxLoanAmount2Member);
-              // $('#intrest_rate').val($societyIntrestRate);
               
+                            
               var $options = $('#society_member_id').val('').find('option').show();
               if (this.value != '')
                 $options.not('[data-val="' + this.value + '"],[data-val=""]').hide();
             })
             // end
+
+            // show the loan details based on society member selection
+            $("#society_member_id").on('change', function() {
+                $('#loanDetailsLink').css("visibility", "visible");
+                $intrestAmount = 0;
+                $minAmount = 1000;
+                if($(this).val() != ''){ //loanpaid="" data-intpaid
+                    $loanAmount = parseInt($(this).find('option:selected').attr('data-loanamount'));
+                    $loanAmountPaid = parseInt($(this).find('option:selected').attr('data-loanpaid'));
+                    $intAmountPaid = parseInt($(this).find('option:selected').attr('data-intpaid'));
+                    $loanId = parseInt($(this).find('option:selected').attr('data-loanId'));
+                    $balance = $loanAmount - $loanAmountPaid;
+                    //$("#loanFullAmount").html("Loan Amount : " + $loanAmount + ' ( Payment Done : ' + loanAmountPaid+')');
+                    $("#loanFullAmount").html("Amount : " + $loanAmount);
+                    $("#loanFullAmount").append("( Paid : " + $loanAmountPaid + ')');
+                    //$("#loanFullAmount").append(" intrest Paid  : " + $intAmountPaid);
+                    $("#balanceDivId").html(" Ballance : " + $balance);
+                    $('#loanDetailsLink').show();
+                    $intrestAmount = $balance * 1 / 100;
+                    $minAmount = $balance * 10 / 100;
+                    $("#loanDetails_url").prop("href", "/loan_account/"+$loanId+"/show")
+                    $("#pay_loan_url").prop("href", "/loan_payment/"+$(this).val()+"/create")
+                    
+                }else{
+                    $("#loanFullAmount").html('');
+                    $('#loanDetailsLink').hide();
+                    //$("#loanDetails_url").prop("href", "#")
+                }
+                $("#intrest_amount").val($intrestAmount);
+                $("#paid_amount").val($minAmount);
+
+            });
+
+
+
         });
     </script>
     
@@ -120,13 +149,25 @@
 
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <label for="society_member_id" class="block text-gray-600 font-medium">Select Society Member<span style="color:red"> *</span></label>
+                                <label for="society_member_id" class="block text-gray-600 font-medium">Select Society Member<span style="color:red"> *</span>
+                                <span style="color:red" id="loanFullAmount"></span></label>
                                 <select id="society_member_id" name="society_member_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                    <option value="">--Choose one option--</option>
+                                    <option value="" data-loanamount="" data-loanpaid="" data-intpaid="">--Choose one option--</option>
                                     @foreach($societyMembersResults as $societyMemberData)
-                                        <option data-val="{{$societyMemberData->society_id}}" value="{{ $societyMemberData->id }}" > {{ $societyMemberData->memberName }} [{{ $societyMemberData->societyName }}] ({{$societyMemberData->society_members ?? 'Free'}})</option>
+                                        <?php $soMe_loan = $memberLoanAccount_arr[$societyMemberData->id] ?? 0;?>
+                                        <?php $loan_paid = $laonPay_member_arr[$societyMemberData->id] ?? 0; ?>
+                                        <?php $loanId = $laon_account_id_arr[$societyMemberData->id] ?? 0; ?>
+                                        
+                                        <option data-loanId="{{$loanId}}" data-loanamount="{{$soMe_loan}}" data-loanpaid="{{$loan_paid}}" data-intpaid="" data-val="{{$societyMemberData->society_id}}" value="{{ $societyMemberData->id }}" > {{ $societyMemberData->memberName }} [{{ $societyMemberData->societyName }}]</option>
                                     @endforeach
                                 </select>
+                                <span id="loanDetailsLink" style="visibility: hidden;">
+                                    <a id="loanDetails_url" href="#" class="inline-flex items-center text-blue-600 hover:underline" target="_new">Loan Details</a> 
+                                    <span id="balanceDivId" style="color:green;"></span>
+                                    <a id="pay_loan_url" href="" class="inline-flex items-center text-blue-600 hover:underline" target="_new">Pay Loan</a>
+                            </span>
+
+
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="pay_date" class="block text-gray-600 font-medium">Pay Date<span style="color:red"> *</span></label>

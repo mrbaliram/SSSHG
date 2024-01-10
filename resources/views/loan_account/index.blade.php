@@ -185,9 +185,6 @@
                     </div>
 
 
-                
-
-
                 <!-- Dislplay summary  -->
                 <br>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">

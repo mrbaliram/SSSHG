@@ -43,16 +43,10 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">Society</th>
+                                    <th scope="col" class="px-6 py-3">Society Member</th>
                                     <!-- <th scope="col" class="px-6 py-3">Member</th> -->
-                                    <th scope="col" class="px-6 py-3">
-                                        <div class="flex items-center">
-                                        Member
-                                        <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-                                        </svg></a>
-                                        </div>
-                                        </th>
+                                    
+                                    <th scope="col" class="px-6 py-3">Account Number</th>
                                     <th scope="col" class="px-6 py-3">Start Date</th>
                                     <th scope="col" class="px-6 py-3">Status</th>
                                     <th scope="col" class="px-6 py-3">Action
@@ -65,10 +59,11 @@
                                 @foreach($results as $data)
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" id="row_id_{{$data->id}}">
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $data->societyName }}
+                                            {{ $data->memberName }} [{{ $data->societyCode }}]
                                         </td>
+                                        
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $data->memberName }}
+                                            {{ $data->account_nummber }}
                                         </td>
                                         
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -96,9 +91,9 @@
                                             </a>&nbsp;&nbsp;
 
                                             <!-- Show details button  -->
-                                            <!-- <a title="show details" href="{{ route('society_member.show', $data->id) }}" class="text-blue-600 hover:underline">
+                                            <a title="show details" href="{{ route('society_member.show', $data->id) }}" class="text-blue-600 hover:underline">
                                                 <svg class="h-6 w-6 text-blue-600"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="16" x2="12" y2="12" />  <line x1="12" y1="8" x2="12.01" y2="8" /></svg>
-                                            </a>&nbsp;&nbsp; -->
+                                            </a>&nbsp;&nbsp;
 
                                             <!-- Delete icon button  -->
                                             <form action="{{ route('society_member.destroy', $data->id) }}" method="POST" class="inline">

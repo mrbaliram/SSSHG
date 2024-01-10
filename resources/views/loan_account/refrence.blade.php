@@ -199,7 +199,9 @@
                                             <select id="society_member_id_{{$i}}" name="society_member_id[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 society_member_frm" required>
                                                 <option data-val="0" value="0">Select one Member </option>
                                                 @foreach($societyMembersResults as $societyMemberData)
+                                                     <?php if(in_array($societyMemberData->id, $memberAlreadyTakenLoan_arr) == false) {?>
                                                     <option data-val="{{$societyMemberData->society_id}}" value="{{ $societyMemberData->id }}"> {{ $societyMemberData->memberName }} [{{ $societyMemberData->societyName }}]</option>
+                                                <?php } ?>
                                                 @endforeach
                                             </select>
                                         </div>

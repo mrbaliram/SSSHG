@@ -10,6 +10,7 @@ use App\Http\Controllers\LoanPaymentController;
 
 use App\Http\Controllers\LoanAccountController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -141,7 +142,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/loan_payment/{id}/edit', [LoanPaymentController::class, 'edit'])->name('loan_payment.edit');
     Route::put('/loan_payment/{id}', [LoanPaymentController::class, 'update'])->name('loan_payment.update');
 
+    // Reports  
+    Route::get('/reports/member', [ReportController::class, 'getMemberReport'])->name('reports.member');
+    //volunteer_report
+    Route::get('/reports/contribution', [ReportController::class, 'getContributionReport'])->name('reports.contribution');
+    //volunteer_sell_report
+    Route::get('/reports/loan', [ReportController::class, 'getLoanReport'])->name('reports.loan');
 
+    Route::get('/reports/member_monthly', [ReportController::class, 'getMemberReportMontrly'])->name('reports.member_monthly');
 });
 
 require __DIR__.'/auth.php';
