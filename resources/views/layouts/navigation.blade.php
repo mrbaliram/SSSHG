@@ -34,7 +34,7 @@
                 </div>
 
                 @php $society_member_link_active = false;
-                    if(request()->routeIs('society_member.index') || request()->routeIs('society_member.create') || request()->routeIs('society_member.edit'))
+                    if(request()->routeIs('society_member.index') || request()->routeIs('society_member.create') || request()->routeIs('society_member.edit') || request()->routeIs('society_member.show'))
                         $society_member_link_active = true;
                 @endphp
 

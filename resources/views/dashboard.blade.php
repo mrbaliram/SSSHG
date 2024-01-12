@@ -8,7 +8,7 @@
    <div class="py-2">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
          <?php $showAddLink = "visibility: hidden;"?>
-         @if(Auth::user()->id == '1')
+         @if(Auth::user()->type == 'cashier') 
             <?php $showAddLink = "visibility: none;"?>
          @endif
          <!-- start row 1 ----------------------------------------------- --> 
@@ -22,11 +22,13 @@
                      <a href="{{route('society.index')}}" class="inline-flex items-center text-blue-600 hover:underline">
                      <h5 class="mb-2 text-2xl font-semibold tracking-tight text-blue-900 dark:text-white">{{$societiesCount}}  <br>Society</h5>
                      </a>
-                  </div> 
+                  </div>
                   <div class="flex justify-end" style={{$showAddLink}}>
-                     <a href="{{route('society.create')}}" class="inline-flex items-center text-blue-600 hover:underline">
-                     <svg class="h-5 w-5 text-blue-700"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="8" y1="12" x2="16" y2="12" /></svg>
-                     </a>
+                     @if(Auth::user()->type == 'cashier') 
+                        <a href="{{route('society.create')}}" class="inline-flex items-center text-blue-600 hover:underline">
+                        <svg class="h-5 w-5 text-blue-700"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="8" y1="12" x2="16" y2="12" /></svg>
+                        </a>
+                     @endif
                   </div>
                </div>
             </div>
@@ -100,12 +102,14 @@
                      <a href="{{route('loan_account.index')}}" class="inline-flex items-center text-blue-600 hover:underline">
                      <h5 class="mb-2 text-2xl font-semibold tracking-tight text-blue-900 dark:text-white">{{$loanAccountCount}}  <br>Loan</h5>
                      </a>
-                  </div> 
-                  <div class="flex justify-end" style={{$showAddLink}}>
-                     <a href="{{route('loan_account.create')}}" class="inline-flex items-center text-blue-600 hover:underline">
-                     <svg class="h-5 w-5 text-blue-700"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="8" y1="12" x2="16" y2="12" /></svg>
-                     </a>
                   </div>
+                  @if(Auth::user()->type == 'cashier') 
+                     <div class="flex justify-end" style={{$showAddLink}}>
+                        <a href="{{route('loan_account.create')}}" class="inline-flex items-center text-blue-600 hover:underline">
+                        <svg class="h-5 w-5 text-blue-700"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="8" y1="12" x2="16" y2="12" /></svg>
+                        </a>
+                     </div>
+                  @endif
                </div>
             </div>
 
@@ -193,11 +197,13 @@
                      <h5 class="mb-2 text-2xl font-semibold tracking-tight text-blue-900 dark:text-white">{{$userCount}}  <br>Users</h5>
                      </a>
                   </div> 
-                  <div class="flex justify-end" style={{$showAddLink}}>
-                     <a href="{{route('user.add')}}" class="inline-flex items-center text-blue-600 hover:underline">
-                     <svg class="h-5 w-5 text-blue-700"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="8" y1="12" x2="16" y2="12" /></svg>
-                     </a>
-                  </div>
+                  @if(Auth::user()->type == 'cashier')
+                     <div class="flex justify-end" style={{$showAddLink}}>
+                        <a href="{{route('user.add')}}" class="inline-flex items-center text-blue-600 hover:underline">
+                        <svg class="h-5 w-5 text-blue-700"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="8" y1="12" x2="16" y2="12" /></svg>
+                        </a>
+                     </div>
+                  @endif
                </div>
             </div>
 

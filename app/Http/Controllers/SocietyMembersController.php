@@ -37,7 +37,7 @@ class SocietyMembersController extends Controller
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
                 ->where('society_members.is_delete', 0)
-                ->orderBy('society_members.account_nummber', 'DESC')
+                ->orderBy('society_members.id', 'DESC')
                 ->paginate();
         }
         
@@ -155,8 +155,10 @@ class SocietyMembersController extends Controller
      */
     public function show($id)
     {
-        $results = DB::table('society_members')
-                ->select('society_members.*', 'societies.code as societyCode' , 'societies.name as societyName','members.name as memberName')
+        $SMResults = DB::table('society_members')
+                ->select('society_members.*', 'societies.code as societyCode' , 'societies.name as societyName','members.name as memberName',
+                    DB::raw('(SELECT sum(amount) FROM contribution_payments WHERE contribution_payments.society_member_id = society_members.id) as totalContributionAmount'),
+                )
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
                 ->where('society_members.id', $id)
@@ -171,12 +173,24 @@ class SocietyMembersController extends Controller
                 ->limit(10)
                 ->get();
 
-        return view('society_member.show', ['results' => $results[0], 'contriButionHistoryResults' => $contriButionHistoryResults]);
 
-        // return view('society_member.show', [
-        //     'results' => $results[0],
-        //     'contriButionHistoryResults' => $contriButionHistoryResults
-        // ]);
+        // call the function show the loan details
+        $memberLoanAccount = DB::table('loan_accounts')
+        ->select('loan_accounts.id')        
+        ->where('loan_accounts.society_member_id', $id)
+        ->where('loan_accounts.parent_id', 0)
+        ->get();
+        if(count($memberLoanAccount)){
+            $result_arr = $this->refrence($memberLoanAccount[0]->id);
+        }else{
+            $result_arr = [];
+        }        
+        return view('society_member.show', [
+            'SMResults' => $SMResults[0], 
+            'contriButionHistoryResults' => $contriButionHistoryResults,
+            'result_arr' => $result_arr
+        ]);
+
     }
 
     /**
@@ -267,5 +281,61 @@ class SocietyMembersController extends Controller
         $sqlQury->is_delete = 1;
         $sqlQury->save();
         return redirect()->route('society_member.index')->with('success', 'Record deleted successfully');
+    }
+
+    public function refrence($id)
+    {
+        
+        $loan_paymentsResults = DB::table('loan_payments')
+                ->select('loan_payments.*', 'societies.name as societyName','members.name as memberName')
+                
+                ->join('loan_accounts','loan_accounts.id','=','loan_payments.loan_account_id')
+
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+
+                ->where('loan_payments.is_delete', 0)
+                ->where('loan_payments.loan_account_id', $id)
+                ->orderBy('loan_payments.created_at', 'Desc')
+                ->paginate();
+
+        $results = DB::table('loan_accounts')
+                ->select('loan_accounts.*', 'societies.id as societyId','members.name as memberName')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_accounts.id', $id)
+                ->get();
+
+        $results = $results[0];
+        //society_member_id
+        $societyMembersResults = DB::table('society_members')
+                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('society_members.is_delete', 0)
+                ->where('societies.id', $results->societyId)
+                ->where('society_members.id','!=', $results->society_member_id)
+                ->get();
+
+        $societyResults = DB::table('societies')
+            ->select('societies.id', 'societies.name', 'societies.code', 'societies.maximum_loan_amount', 'societies.intrest_rate')
+            ->where('societies.id', $results->societyId)
+            ->get();
+
+        $allRefrences = DB::table('loan_accounts')
+                ->select('loan_accounts.*', 'societies.id as societyId','members.name as memberName')
+                ->join('society_members','society_members.id','=','loan_accounts.society_member_reference_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('loan_accounts.parent_id', $id)
+                ->get();
+        
+        // return view('loan_account.payment_history', ['results' => $results,'societyResults' => $societyResults, 'societyMembersResults' => $societyMembersResults,'allRefrences' => $allRefrences, 'loan_paymentsResults' => $loan_paymentsResults]);
+
+         return  ['results' => $results,'societyResults' => $societyResults, 'societyMembersResults' => $societyMembersResults,'allRefrences' => $allRefrences, 'loan_paymentsResults' => $loan_paymentsResults];
+
+        // return view('loan_account.refrence', ['results' => $results,'societyResults' => $societyResults, 'societyMembersResults' => $societyMembersResults,'allRefrences' => $allRefrences, 'memberAlreadyTakenLoan_arr' => $memberAlreadyTakenLoan_arr]);
     }
 }

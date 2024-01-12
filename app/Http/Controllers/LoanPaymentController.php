@@ -41,7 +41,7 @@ class LoanPaymentController extends Controller
         }else{
 
             $results = DB::table('loan_payments')
-                ->select('loan_payments.*', 'societies.name as societyName','members.name as memberName')
+                ->select('loan_payments.*', 'societies.name as societyName','members.name as memberName','society_members.id as societyMemberId')
                 
                 ->join('loan_accounts','loan_accounts.id','=','loan_payments.loan_account_id')
 

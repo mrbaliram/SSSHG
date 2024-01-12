@@ -11,11 +11,7 @@ class ReportController extends Controller
     
     public function getMemberReportMontrly(Request $request)
     {
-        //totalContributionAmount totalIntPayments totalLoanPayment
-        // DB::raw('(SELECT sum(paid_amount) FROM loan_payments WHERE loan_payments.society_member_id = society_members.id) as totalLoanPayment'),
-        // DB::raw('(SELECT sum(intrest_amount) FROM loan_payments WHERE loan_payments.society_member_id = society_members.id) as totalIntPayments'),
-
-         $results = DB::table('society_members')
+        $results = DB::table('society_members')
                 ->select('society_members.*', 'societies.code as societyCode','members.name as memberName',
                     DB::raw('(SELECT sum(amount) FROM contribution_payments WHERE contribution_payments.society_member_id = society_members.id) as totalContributionAmount'),
                     DB::raw('(SELECT count(society_member_reference_id) FROM loan_accounts WHERE loan_accounts.society_member_reference_id = society_members.id) as loanRefered'),

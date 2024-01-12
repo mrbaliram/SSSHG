@@ -36,7 +36,9 @@
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $data->memberName }} [{{ $data->societyName }}]
+                                                    <a title="show details" href="{{route('society_member.show',$data->society_member_id) }}"   class= "text-blue-600 hover:underline">
+                                                       {{ $data->memberName }} [{{ $data->societyName }}]
+                                                    </a>
                                         </td>
 
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
