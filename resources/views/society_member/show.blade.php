@@ -26,13 +26,13 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Society Name</td>
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{$SMResults->societyName}}
+                                        {{$SMResults->societyName}} <a title="show details" href="{{ route('society.show', $SMResults->society_id) }}" class="text-blue-600 hover:underline">Show Details</a>
                                     </td>
                                 </tr>
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Member Name</td>
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{$SMResults->memberName}}
+                                        {{$SMResults->memberName}}  <a title="show details" href="{{ route('member.show', $SMResults->member_id) }}" class="text-blue-600 hover:underline">Show Details</a>
                                     </td>
                                 </tr> 
 
@@ -49,7 +49,7 @@
                     </div>
                     <!--End Contribution History -->
 
-                    <br><!--Start Contribution History -->
+                    <div class="mb-4"></div>
                     <div class="mb-2" align="left">
                         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                             {{ 'Shown Contribution History' }}<br>

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('contribution_amount')->nullable();
             $table->decimal('maximum_loan_amount')->nullable();
             $table->decimal('intrest_rate')->default('1');
+            $table->string('branch_code')->nullable();            
             $table->dateTime('start_date', $precision = 0)->nullable(); 
             $table->string('contact_person')->nullable();
             $table->string('contact_no')->nullable();
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->string('logo_url')->nullable();
             $table->string('image_url')->nullable();
             $table->boolean('is_delete')->nullable();
+
             $table->timestamps();
 
         });

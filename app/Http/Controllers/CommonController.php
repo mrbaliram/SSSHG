@@ -23,21 +23,23 @@ class CommonController extends Controller
     public function dashboard()
     {
         
-        $userCount = User::count();
-        $societiesCount = Society::count();
-        $memberCount = Member::count();
-        $societiesMemberCount = SocietyMembers::count();
-        $contribution_payment = ContributionPayment::sum('amount');
+        $userCount = User::where('is_delete', '0')->count();
+        $societiesCount = Society::where('is_delete', '0')->count();
+        $memberCount = Member::where('is_delete', '0')->count();
+        $societiesMemberCount = SocietyMembers::where('is_delete', '0')->count();
+        $contribution_payment = ContributionPayment::where('is_delete', '0')->sum('amount');
 
-        $loanAccountCount = LoanAccount::where('parent_id', '0')->count();
-        $loanAmountOutStanding = LoanAccount::where('parent_id', '0')->sum('full_amount');
+        $loanAccountCount = LoanAccount::where('parent_id', '0')->where('is_delete', '0')->count();
+        $loanAmountOutStanding = LoanAccount::where('parent_id', '0')->where('is_delete', '0')->sum('full_amount');
         
-        $loanPaid = LoanPayment::sum('paid_amount');
-        $loanIntrestPaind = LoanPayment::sum('intrest_amount');
+        $loanPaid = LoanPayment::where('is_delete', '0')->sum('paid_amount');
+        $loanIntrestPaind = LoanPayment::where('is_delete', '0')->sum('intrest_amount');
+
+        $contactUsCount = SocietyMembers::where('is_delete', '0')->count();
 
 
 
-        return view('dashboard', compact('userCount','societiesCount','memberCount','societiesMemberCount','contribution_payment', 'loanAccountCount', 'loanAmountOutStanding','loanPaid','loanIntrestPaind'));
+        return view('dashboard', compact('userCount','societiesCount','memberCount','societiesMemberCount','contribution_payment', 'loanAccountCount', 'loanAmountOutStanding','loanPaid','loanIntrestPaind','contactUsCount'));
         
     }
 

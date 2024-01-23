@@ -54,7 +54,7 @@
                         <?php $tempSociety_id = $results->society_id ?>
                     @endif
 
-                        <!-- language -->
+                        <!-- society -->
                         <div class="mb-4">
                             <label for="society_id" class="block text-gray-600 font-medium">Select Society<span style="color:red"> *</span></label>
                             <select id="society_id" name="society_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>

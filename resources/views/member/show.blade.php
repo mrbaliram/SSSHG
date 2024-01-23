@@ -17,21 +17,45 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Select Parent Member </td>
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{$results->parent_id}}
+                                        @if($results->parent_id != 0)
+                                            @foreach($results_ref as $results_ref_data)
+                                                @if($results_ref_data->id == $results->parent_id)
+                                                    {{$results_ref_data->name}}
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            Self
+                                        @endif
                                     </td>
                                 </tr>
 
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Select First Refrence </td>
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{$results->reference_id}}
+                                        @if($results->parent_id != 0)
+                                            @foreach($results_ref as $results_ref_data)
+                                                @if($results_ref_data->id == $results->reference_id)
+                                                    {{$results_ref_data->name}}
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            Self
+                                        @endif
                                     </td>
                                 </tr>
 
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Select Second Refrence </td>
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{$results->sub_reference_id}}
+                                        @if($results->parent_id != 0)
+                                            @foreach($results_ref as $results_ref_data)
+                                                @if($results_ref_data->id == $results->sub_reference_id)
+                                                    {{$results_ref_data->name}}
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            Self
+                                        @endif
                                     </td>
                                 </tr>
 

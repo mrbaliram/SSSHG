@@ -6,20 +6,35 @@
         </h2>
     </x-slot>
     <?php
-        $dateValue = date('Y-m-d');
-        $dateArr = explode("-", $dateValue);
-        $currentYear = $dateArr[0];
-        $currentMoth = $dateArr[1];     
+        // $dateValue = date('Y-m-d');
+        // $dateArr = explode("-", $dateValue);
+        // $currentYear = $dateArr[0];
+        // $currentMoth = $dateArr[1];     
     ?>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                     <div class="grid md:grid-cols-2 md:gap-6">
-                            <div class="relative z-0 w-full mb-6 group">
-                                <label for="pay_for_month" class="block text-gray-600 font-medium">Pay For Month <span id="price" style="color: green;"></span></label>
-                                
+                    <!-- Search Filter heading -->
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <label for="pay_for_month" class="block text-gray-600 font-medium">Month</label>
+                        </div>
+                        <div>
+                            <label for="pay_for_month" class="block text-gray-600 font-medium">Year</label>
+                        </div>
+                        <div >
+                            <label for="pay_for_month" class="block text-gray-600 font-medium">Society</label>
+                        </div>
+                    </div>
+                    <div class="mb-2"></div>
+                    <form action="{{ route('reports.member_monthly') }}" method="POST" class="inline">
+                            @csrf
+                            @method('GET')
+                        <div class="grid grid-cols-4 gap-4">
+                        
+                            <div>
                                 <select id="pay_for_month" name="pay_for_month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="01" {{ $currentMoth == 1 ? 'Selected' : '' }}>January</option>
                                     <option value="02" {{ $currentMoth == 2 ? 'Selected' : '' }}>February</option>
@@ -35,8 +50,7 @@
                                     <option value="12" {{ $currentMoth == 12 ? 'Selected' : '' }}>December</option>
                                 </select>
                             </div>
-                            <div class="relative z-0 w-full mb-6 group">
-                                <label for="pay_for_year" class="block text-gray-600 font-medium">Pay For Year <span id="price" style="color: green;"></span></label>
+                            <div>
                                 <select id="pay_for_year" name="pay_for_year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="2023" {{ $currentYear == 2023 ? 'Selected' : '' }}>2023</option>
                                     <option value="2024" {{ $currentYear == 2024 ? 'Selected' : '' }}>2024</option>
@@ -46,8 +60,23 @@
                                     <option value="2028" {{ $currentYear == 2028 ? 'Selected' : '' }}>2028</option>
                                 </select>
                             </div>
+                            <div>
+                                <select id="society_id" name="society_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <option value="0" selected>--All--</option>
+                                    @foreach($societyResults as $societyData)
+                                        <option value="{{ $societyData->id }}" {{ $societyData->id == $searchVal_society_id ? 'Selected' : '' }}> {{ $societyData->name }} [{{ $societyData->code }}]</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div align="center">
+                                <button id="searchBtn" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >
+                                    <span class="flex"><svg class="h-5 w-5 text-white-700"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="10" cy="10" r="7" />  <line x1="21" y1="21" x2="15" y2="15" /></svg>Search</span>
+                                </button>
+                            </div>                        
                         </div>
-
+                    </form> 
+                    <div class="mb-2"></div>
+                    <!-- Display Data -->
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -55,10 +84,7 @@
                                     <th scope="col" class="px-6 py-3">Society Member</th>
                                     <th scope="col" class="px-6 py-3">Account Number</th>
                                     <th scope="col" class="px-6 py-3">Contribution</th>
-                                    <th scope="col" class="px-6 py-3">Loan Refer</th>
-                                    <th scope="col" class="px-6 py-3">loan-Amount</th>
-                                    <th scope="col" class="px-6 py-3">Loan-Payment</th>
-                                    <th scope="col" class="px-6 py-3">Int-Payment</th>
+                                    <th scope="col" class="px-6 py-3">Pay Month Year</th>
                                     <th scope="col" class="px-6 py-3">Start Date</th>
                                 </tr>
                             </thead>
@@ -95,36 +121,15 @@
                                         </td>
                                         
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $data->totalContributionAmount }}
-                                            <?php $totalcontribution += $data->totalContributionAmount;?>
-                                        </td>
-                                        <!-- loan_account/1/refrence -->
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                             @if($data->loanRefered > 0)
-                                            <a class="inline-flex items-center text-blue-600 hover:underline" target="_new" href="/loan_account/{{$data->loanReferedAccountId}}/refrence" title="Soow the loan details"> 
-                                            {{ $data->loanRefered ?? 0}}
-                                            <?php $totalLoanrefer += $data->loanRefered;?>
-
-                                             </a>
-                                             @endif
+                                            {{ $data->contributionAmount }}
+                                            <?php $totalcontribution += $data->contributionAmount;?>
                                         </td>
 
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                           
-                                            <a class="inline-flex items-center text-blue-600 hover:underline" target="_new" href="/loan_account/{{$loanId}}/show" title="Soow the loan details"> {{ $data->totalLoanAmount }} 
-                                            <?php $totalLoanamount += $data->totalLoanAmount;?></a>
-                                            
+                                            {{ $data->pay_month_year }}
                                         </td>
 
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{  $loan_paid }}
-                                            <?php $totalLoanpayment += $loan_paid;?>
-                                        </td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $loanInt_paid }}
-                                            <?php $totalIntpayment += $loanInt_paid;?>
-                                        </td>
-
+                                       
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ carbon\carbon::parse($data->start_date)->format('d-m-Y') }}
                                         </td>
@@ -135,11 +140,7 @@
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Total Amount </td>
                                         <td></td>
                                         <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"> {{$totalcontribution}}</td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$totalLoanrefer}}</td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$totalLoanamount}}</td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$totalLoanpayment}}</td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$totalIntpayment}}</td>
-                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"></td>                              
+                                                                   
                                     </tr>
                             </tbody>
                         </table>

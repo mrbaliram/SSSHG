@@ -40,7 +40,7 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('society_member.index')" :active="$society_member_link_active">
-                        {{ __('Society Member') }}
+                        {{ __('Society-Member') }}
                     </x-nav-link>
                 </div>
                 <!-- contribution_payment -->
@@ -63,7 +63,7 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('loan_account.index')" :active="$loan_account_link_active">
-                        {{ __('Loan Ac') }}
+                        {{ __('Loan') }}
                     </x-nav-link>
                 </div>
 
@@ -75,19 +75,32 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('loan_payment.index')" :active="$loan_payment_link_active">
-                        {{ __('Loan Payment') }}
+                        {{ __('Loan-Pay') }}
                     </x-nav-link>
                 </div>
 
-                <!-- volunteer_book_check -->
+                <!-- c  -->
                 @php $user_profile = false;
                 if(request()->routeIs('user.index') ||  request()->routeIs('user.edit') || request()->routeIs('user.add'))
                    $user_profile = true;
                 @endphp
                 
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <!-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('user.index')" :active="$user_profile">
                         {{ __('Users') }}
+                    </x-nav-link>
+                </div> -->
+
+                <!-- Contact us   contact_us-->
+                @php $contact_us = false;
+                if(request()->routeIs('contact_us.index') ||  request()->routeIs('contact_us.edit') || request()->routeIs('contact_us.create') || request()->routeIs('contact_us.show'))
+                   $contact_us = true;
+                @endphp
+                
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('contact_us.index')" :active="$contact_us">
+                        {{ __('Query') }}
                     </x-nav-link>
                 </div>
 
@@ -113,20 +126,20 @@
 
                     <x-slot name="content" :active="true">
 
-                        <x-dropdown-link :href="route('reports.contribution')">
+                        <!-- <x-dropdown-link :href="route('reports.contribution')">
                             {{ __('All Contribution Reports') }}
-                        </x-dropdown-link>
-
-                        <x-dropdown-link :href="route('reports.loan')">
-                            {{ __('All Loan Reports') }}
-                        </x-dropdown-link>
+                        </x-dropdown-link> -->                        
 
                         <x-dropdown-link :href="route('reports.member')">
-                            {{ __('All Member Reports') }}
+                            {{ __('Contribution & Loan Reports') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('reports.member_monthly')">
-                            {{ __('Monthly Reports') }}
+                            {{ __('Monthly Contribution Reports') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('reports.loan')">
+                            {{ __('Monthly Loan Reports') }}
                         </x-dropdown-link>
 
                     </x-slot>
@@ -148,6 +161,10 @@
                     </x-slot>
 
                     <x-slot name="content" :active="true">
+
+                        <x-dropdown-link :href="route('user.index')">
+                            {{ __('Users') }}
+                        </x-dropdown-link>
 
                         <x-dropdown-link :href="route('society.index')">
                             {{ __('Societies') }}
@@ -209,11 +226,24 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard.dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
+
+        @php $member_link_active = false;
+            if(request()->routeIs('member.index') || request()->routeIs('member.create') || request()->routeIs('member.edit') || request()->routeIs('member.show'))
+                $member_link_active = true;
+        @endphp
+
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('member.index')" :active="$member_link_active">
+                {{ __('Members') }}
+            </x-responsive-nav-link>
+        </div>
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">

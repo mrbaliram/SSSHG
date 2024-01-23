@@ -10,12 +10,17 @@ class SocietyMembers extends Model
     use HasFactory;
 
     protected $fillable = [
-            'society_id',
-            'member_id',
-            'start_date',
-            'end_date',
-            'status',
-            'other_info',
+            'user_id',
+            'society_member_id',
+            'account_number',
+            'name',
+            'mobile',
+            'type',
+            'remarks',
+            'message',
+            'other_info1',
+            'other_info2',
+            'status',            
             'is_delete',
     ];
 }

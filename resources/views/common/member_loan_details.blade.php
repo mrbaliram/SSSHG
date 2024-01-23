@@ -1,8 +1,9 @@
 <!-- Show the main info -->
 <div class="mb-4">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ 'Main Person (Loan has been taken by)' }}
+        {{ 'Your Loans' }}
     </h2>
+    <div class="mb-2"></div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -66,11 +67,12 @@
 </div>
 
 <!-- payment histrory -->
+<div class="mb-4"></div>
 <div class="mb-4">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         {{ 'Payment History' }}
     </h2>
-
+    <div class="mb-2"></div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -80,7 +82,6 @@
                     <th scope="col" class="px-6 py-3">Intrest Amount</th>
                     
                     <th scope="col" class="px-6 py-3">Pay Date</th>
-                    <th scope="col" class="px-6 py-3">Status</th>
                     
                 </tr>
             </thead>
@@ -107,19 +108,6 @@
                             {{ carbon\carbon::parse($data->pay_date)->format('d-m-Y') }}
                         </td>
                         
-                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            @if($data->status == 1)
-                                @php $setStatus = "checked"; @endphp
-                            @elseif($data->status == 0)
-                                @php $setStatus = ""; @endphp
-                            @endif
-                            <label class="relative inline-flex items-center mb-5">
-                                <input type="checkbox" value="" class="sr-only peer" {{ $setStatus }} disabled>
-                                <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                  <span class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500"></span>
-                            </label>
-                        </td>
-
                         
                     </tr>
                 @endforeach
@@ -135,8 +123,9 @@
 @if($allRefrences->count() > 0 )
     <div class="mb-4">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ 'Refrence Person (Loan on behalf of)' }}
-    </h2><br>
+        {{ 'Refrence Person' }}
+    </h2>
+    <div class="mb-2"></div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">

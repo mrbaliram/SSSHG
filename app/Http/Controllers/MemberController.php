@@ -138,8 +138,25 @@ class MemberController extends Controller
                 ->select('members.*')
                 ->where('members.id', $id)
                 ->get()->first();
+        //dd($results->parent_id); reference_id sub_reference_id
+        $member_ref_IdList = array();
 
-        return view('member.show', ['results' => $results]);
+            array_push($member_ref_IdList, $results->parent_id);
+            array_push($member_ref_IdList, $results->reference_id);
+            array_push($member_ref_IdList, $results->sub_reference_id);
+        
+
+             //print_r($member_ref_IdList);
+            //  dd(1);
+
+        $results_ref = DB::table('members')
+                ->select('members.name','members.id')
+                ->whereIn('members.id', $member_ref_IdList)
+                ->get();
+
+        
+        //dd($results_ref);
+        return view('member.show', ['results' => $results, 'results_ref' => $results_ref]);
     }
 
     /**

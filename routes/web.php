@@ -7,6 +7,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SocietyMembersController;
 use App\Http\Controllers\ContributionPaymentController;
 use App\Http\Controllers\LoanPaymentController;
+use App\Http\Controllers\ContactUsController;
 
 use App\Http\Controllers\LoanAccountController;
 use App\Http\Controllers\CommonController;
@@ -141,6 +142,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/loan_payment/store', [LoanPaymentController::class, 'store'])->name('loan_payment.store');
     Route::get('/loan_payment/{id}/edit', [LoanPaymentController::class, 'edit'])->name('loan_payment.edit');
     Route::put('/loan_payment/{id}', [LoanPaymentController::class, 'update'])->name('loan_payment.update');
+
+
+    // contact_us - ContactUsController
+    Route::get('/contact_us', [ContactUsController::class, 'index'])->name('contact_us.index');
+    Route::delete('/contact_us/{id}', [ContactUsController::class, 'destroy'])->name('contact_us.destroy');
+    Route::get('/contact_us/{id}/show', [ContactUsController::class, 'show'])->name('contact_us.show');
+    Route::get('/contact_us/create', [ContactUsController::class, 'create'])->name('contact_us.create');
+    Route::post('/contact_us/store', [ContactUsController::class, 'store'])->name('contact_us.store');
+    Route::get('/contact_us/{id}/edit', [ContactUsController::class, 'edit'])->name('contact_us.edit');
+    Route::put('/contact_us/{id}', [ContactUsController::class, 'update'])->name('contact_us.update');
+
 
     // Reports  
     Route::get('/reports/member', [ReportController::class, 'getMemberReport'])->name('reports.member');
