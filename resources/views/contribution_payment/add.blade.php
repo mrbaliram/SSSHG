@@ -177,7 +177,7 @@
                         
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <label for="price" class="block text-gray-600 font-medium">Amount <span id="amount" style="color: green;"></span></label>
+                                <label for="price" class="block text-gray-600 font-medium">Amount <span style="color:red"> *</span> <span id="amount" style="color: green;"></span></label>
                                 <input id="amount" type="number" name="amount" value="{{$default_amount}}" class="border rounded-md w-full py-2 px-3 text-gray-700">
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
@@ -188,7 +188,7 @@
 
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <label for="pay_for_month" class="block text-gray-600 font-medium">Pay For Month <span id="price" style="color: green;"></span></label>
+                                <label for="pay_for_month" class="block text-gray-600 font-medium">Pay For Month <span style="color:red"> *</span><span id="price" style="color: green;"></span></label>
                                 
                                 <select id="pay_for_month" name="pay_for_month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="01" {{ $currentMoth == 1 ? 'Selected' : '' }}>January</option>
@@ -206,7 +206,7 @@
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
-                                <label for="pay_for_year" class="block text-gray-600 font-medium">Pay For Year <span id="price" style="color: green;"></span></label>
+                                <label for="pay_for_year" class="block text-gray-600 font-medium">Pay For Year <span style="color:red"> *</span><span id="price" style="color: green;"></span></label>
                                 <select id="pay_for_year" name="pay_for_year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="2023" {{ $currentYear == 2023 ? 'Selected' : '' }}>2023</option>
                                     <option value="2024" {{ $currentYear == 2024 ? 'Selected' : '' }}>2024</option>

@@ -67,6 +67,37 @@ class ContributionPaymentController extends Controller
     public function create()
     {
         //$results = null;
+
+        // Start : Set Default month and year or extrat from session if exists
+        $dateValue = date('Y-m-d');
+        $dateArr = explode("-", $dateValue);
+        $currentYear = $dateArr[0];
+        $currentMoth = $dateArr[1]; 
+        if(session()->has('session_pay_for_month')){
+            $currentMoth = session()->get('session_pay_for_month');
+        }
+        if(session()->has('session_pay_for_year')){
+            $currentYear = session()->get('session_pay_for_year');
+        }
+        $society_member_id_list = array();
+        $pay4Month = $currentMoth.'-'.$currentYear;
+        $alreadyPaid_members = DB::table('contribution_payments')
+                ->select('contribution_payments.*', 'societies.name as societyName','members.name as memberName')
+                ->join('society_members','society_members.id','=','contribution_payments.society_member_id')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('contribution_payments.is_delete', 0)
+                ->where('pay_for_month_year', $pay4Month)                
+                ->whereNotIn('society_member_id', $society_member_id_list)
+                ->get();
+
+        
+        foreach ($alreadyPaid_members as $sm_id) {
+           array_push($society_member_id_list, $sm_id->society_member_id);
+        } 
+        // End  : Set Default month and year or extrat from session if exists
+
+
         $societyResults = DB::table('societies')
             ->select('societies.id', 'societies.name', 'societies.code', 'societies.maximum_loan_amount', 'societies.intrest_rate')
             ->where('societies.is_delete', 0)
@@ -77,6 +108,7 @@ class ContributionPaymentController extends Controller
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
                 ->where('society_members.is_delete', 0)
+                ->whereNotIn('society_members.id', $society_member_id_list)
                 ->get();
 
       
