@@ -63,9 +63,12 @@
                                 <label for="name" class="block text-gray-600 font-medium">Socity Member<span style="color:red"> *</span></label>
                                 <select id="member_id" name="member_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="">--Choose one option--</option>
-                                    @foreach($memberResults as $memberData)
-                                        <option  data-val="{{$memberData->society_id ?? 0}}" value="{{ $memberData->id }}" {{ $memberData->id == $results->society_member_id ? 'Selected' : '' }}> {{ $memberData->name }} ({{ $memberData->guardian }}) [{{$memberData->societyCode ?? 'Still not in any Society'}}]</option>
+                                    @foreach($societyMembersResults as $societyMemberData)
+                                      
+                                        <option  value="{{ $societyMemberData->id }}" {{ $societyMemberData->id == $results->society_member_id ? 'Selected' : '' }}> {{ $societyMemberData->memberName }} [{{ $societyMemberData->societyName }}]</option>
                                     @endforeach
+
+                                   
                                 </select>
                             </div>
                         </div>

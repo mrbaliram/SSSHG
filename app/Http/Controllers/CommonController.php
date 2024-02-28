@@ -9,6 +9,8 @@ use App\Models\SocietyMembers;
 use App\Models\ContributionPayment;
 use App\Models\LoanAccount;
 use App\Models\LoanPayment;
+use App\Models\ContactUs;
+
 
 
 use Illuminate\Support\Facades\DB;     
@@ -35,7 +37,7 @@ class CommonController extends Controller
         $loanPaid = LoanPayment::where('is_delete', '0')->sum('paid_amount');
         $loanIntrestPaind = LoanPayment::where('is_delete', '0')->sum('intrest_amount');
 
-        $contactUsCount = SocietyMembers::where('is_delete', '0')->count();
+        $contactUsCount = ContactUs::where('is_delete', '0')->count();
 
 
 

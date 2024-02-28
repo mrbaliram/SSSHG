@@ -38,17 +38,16 @@ class ContactUsController extends Controller
         }else{
             $results = DB::table('contact_us')
                 ->select('contact_us.*', 'societies.code as societyCode','members.name as memberName')
-
                 ->join('society_members','society_members.id','=','contact_us.society_member_id')
                 ->join('societies','societies.id','=','society_members.society_id')
                 ->join('members','members.id','=','society_members.member_id')
-
                 ->where('contact_us.is_delete', 0)
                 ->orderBy('contact_us.created_at', 'DESC')
                 ->paginate(10);
-        }
+        } //dd($results);
         return view('contact_us.index', compact('results'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -59,13 +58,21 @@ class ContactUsController extends Controller
     {
         //
         $results = null;
-        $memberResults = DB::table('members')
-            ->select('members.id', 'members.name','members.guardian','society_members.member_id', 'society_members.society_id','societies.code as societyCode')
-            ->leftJoin('society_members','society_members.member_id','=','members.id')
-            ->leftJoin('societies','society_members.society_id','=','societies.id')
-            ->where('members.is_delete', 0)
-            ->get();
-        return view('contact_us.add', ['results' => $results, 'memberResults' => $memberResults]);
+        // $memberResults = DB::table('members')
+        //     ->select('members.id', 'members.name','members.guardian','society_members.member_id', 'society_members.society_id','societies.code as societyCode')
+        //     ->leftJoin('society_members','society_members.member_id','=','members.id')
+        //     ->leftJoin('societies','society_members.society_id','=','societies.id')
+        //     ->where('members.is_delete', 0)
+        //     ->get();
+
+        $societyMembersResults = DB::table('society_members')
+                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('society_members.is_delete', 0)
+                ->get();
+
+        return view('contact_us.add', ['results' => $results, 'societyMembersResults' => $societyMembersResults]);
     }
 
     /**
@@ -135,13 +142,15 @@ class ContactUsController extends Controller
     {
         //
         $results = ContactUs::find($id);
-        $memberResults = DB::table('members')
-            ->select('members.id', 'members.name','members.guardian','society_members.member_id', 'society_members.society_id','societies.code as societyCode')
-            ->leftJoin('society_members','society_members.member_id','=','members.id')
-            ->leftJoin('societies','society_members.society_id','=','societies.id')
-            ->where('members.is_delete', 0)
-            ->get();
-        return view('contact_us.edit', ['results' => $results, 'memberResults' => $memberResults]);
+
+        $societyMembersResults = DB::table('society_members')
+                ->select('society_members.*', 'societies.name as societyName','members.name as memberName')
+                ->join('societies','societies.id','=','society_members.society_id')
+                ->join('members','members.id','=','society_members.member_id')
+                ->where('society_members.is_delete', 0)
+                ->get();
+                
+        return view('contact_us.edit', ['results' => $results, 'societyMembersResults' => $societyMembersResults]);
     }
 
     /**
